@@ -17,7 +17,7 @@ const CountryMaster = () => {
     const [activeStates, setActiveStates] = useState({});
     const tableHeaders = ["Country", "Edit", "Active"];
     const rowsPerPage = 10;
-    const API_URL = 'http://localhost:5000/countries';
+    const API_URL = 'https://kdstocksoft.onrender.com/countries';
 
     useEffect(() => {
         fetchCountries();

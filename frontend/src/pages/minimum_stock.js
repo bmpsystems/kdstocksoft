@@ -40,7 +40,7 @@ const MinimumStock = () => {
         "Total Price"
     ];
 
-    const API_URL = 'http://localhost:5000/minimum-stock';
+    const API_URL = 'https://kdstocksoft.onrender.com/minimum-stock';
 
     useEffect(() => {
         axios.get(API_URL)

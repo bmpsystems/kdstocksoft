@@ -22,10 +22,10 @@ import { FaBoxOpen, FaExclamationTriangle, FaTimesCircle, FaRupeeSign, FaChartLi
 import { MdInventory, MdReport } from "react-icons/md";
 import { IoMdTrendingUp, IoMdTrendingDown } from "react-icons/io";
 
-const API_STOCK = "http://localhost:5000/stock-dashboard";
-const API_STOCKIN = "http://localhost:5000/stock-in-dashboard";
-const API_STOCKOUT = "http://localhost:5000/stock-out-dashboard";
-const API_MINIMUM = "http://localhost:5000/minimum-stock";
+const API_STOCK = "https://kdstocksoft.onrender.com/stock-dashboard";
+const API_STOCKIN = "https://kdstocksoft.onrender.com/stock-in-dashboard";
+const API_STOCKOUT = "https://kdstocksoft.onrender.com/stock-out-dashboard";
+const API_MINIMUM = "https://kdstocksoft.onrender.com/minimum-stock";
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 const DashboardPg = () => {

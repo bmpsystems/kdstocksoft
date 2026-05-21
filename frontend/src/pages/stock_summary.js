@@ -11,7 +11,7 @@ const Stocksummary = () => {
 
     useEffect(() => {
         // Fetch stock summary data from API
-        fetch('http://localhost:5000/stock-summary', {
+        fetch('https://kdstocksoft.onrender.com/stock-summary', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

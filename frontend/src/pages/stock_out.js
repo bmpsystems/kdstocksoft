@@ -15,7 +15,7 @@ import {
     Badge
 } from 'react-bootstrap';
 
-const API_URL = 'http://localhost:5000/stock-out';
+const API_URL = 'https://kdstocksoft.onrender.com/stock-out';
 
 const PURPOSE_OPTIONS = [
     { value: '', label: 'Select Purpose' },
@@ -271,7 +271,7 @@ const StockOut = () => {
         ) {
             const fetchSuggestions = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:5000/company-search?query=${companyQuery}`);
+                    const response = await axios.get(`https://kdstocksoft.onrender.com/company-search?query=${companyQuery}`);
                     setCompanySuggestions(response.data);
                 } catch (error) {
                     setCompanySuggestions([]);
@@ -292,7 +292,7 @@ const StockOut = () => {
         ) {
             const fetchSuggestions = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:5000/stock-search?query=${productQuery}`);
+                    const response = await axios.get(`https://kdstocksoft.onrender.com/stock-search?query=${productQuery}`);
                     setProductSuggestions(
                         Array.isArray(response.data)
                             ? response.data.map(item => ({

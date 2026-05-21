@@ -39,7 +39,7 @@ const ProductInOut = () => {
     // Try product auto dropdown
     setLoadingProducts(true);
     try {
-      const res = await axios.get('http://localhost:5000/product-search', {
+      const res = await axios.get('https://kdstocksoft.onrender.com/product-search', {
         params: { query: value }
       });
       setProducts(Array.isArray(res.data) ? res.data : []);
@@ -56,7 +56,7 @@ const ProductInOut = () => {
     if (value && value.length >= 3) {
       setLoadingTxn(true);
       try {
-        const resTxn = await axios.get('http://localhost:5000/product-movement-search', {
+        const resTxn = await axios.get('https://kdstocksoft.onrender.com/product-movement-search', {
           params: { query: value }
         });
         setTxnRows(Array.isArray(resTxn.data) ? resTxn.data : []);
@@ -118,7 +118,7 @@ const ProductInOut = () => {
     setError('');
 
     try {
-      const res = await axios.get('http://localhost:5000/product-movement-search', {
+      const res = await axios.get('https://kdstocksoft.onrender.com/product-movement-search', {
         params: { query: queryTxt }   // 🔹 Normalized query goes here
       });
       setTxnRows(Array.isArray(res.data) ? res.data : []);

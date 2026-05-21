@@ -27,7 +27,7 @@ const LocationMaster = () => {
     ];
 
     const rowsPerPage = 10;
-    const API_URL = 'http://localhost:5000/location';
+    const API_URL = 'https://kdstocksoft.onrender.com/location';
 
     useEffect(() => {
         // Fetch user info from localStorage

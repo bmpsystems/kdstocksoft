@@ -19,7 +19,7 @@ const BankMaster = () => {
     const [activeStates, setActiveStates] = useState({});
     const tableHeaders = ["Bank", "Address", "Branch", "Edit", "Active"];
     const rowsPerPage = 10;
-    const API_URL = 'http://localhost:5000/bank';
+    const API_URL = 'https://kdstocksoft.onrender.com/bank';
 
     useEffect(() => {
         fetchBanks();

@@ -59,9 +59,9 @@ const QuickReportModal = ({
     try {
       // Fetch all three datasets in parallel
       const [stock, stockin, stockout] = await Promise.all([
-        fetch("http://localhost:5000/stock-dashboard").then((r) => r.json()),
-        fetch("http://localhost:5000/stock-in-dashboard").then((r) => r.json()),
-        fetch("http://localhost:5000/stock-out-dashboard").then((r) => r.json()),
+        fetch("https://kdstocksoft.onrender.com/stock-dashboard").then((r) => r.json()),
+        fetch("https://kdstocksoft.onrender.com/stock-in-dashboard").then((r) => r.json()),
+        fetch("https://kdstocksoft.onrender.com/stock-out-dashboard").then((r) => r.json()),
       ]);
       setFullReportData({ stock, stockin, stockout });
     } catch (err) {
@@ -80,7 +80,7 @@ const QuickReportModal = ({
   const handleDownloadSummary = async () => {
     // Download current stock as summary
     try {
-      const stock = await fetch("http://localhost:5000/stock-dashboard").then((r) => r.json());
+      const stock = await fetch("https://kdstocksoft.onrender.com/stock-dashboard").then((r) => r.json());
       if (!stock.length) {
         alert("No stock data to export.");
         return;

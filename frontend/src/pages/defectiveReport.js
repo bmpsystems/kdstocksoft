@@ -25,7 +25,7 @@ const DefectiveReport = () => {
   // Fetch Make options
   useEffect(() => {
     axios
-      .get('http://localhost:5000/make-helper')
+      .get('https://kdstocksoft.onrender.com/make-helper')
       .then((res) => setMakeOptions(res.data))
       .catch(() => setMakeOptions([]));
   }, []);
@@ -38,7 +38,7 @@ const DefectiveReport = () => {
       return;
     }
     axios
-      .post('http://localhost:5000/product-category-helper', { make_Id: Number(selectedMakeId) })
+      .post('https://kdstocksoft.onrender.com/product-category-helper', { make_Id: Number(selectedMakeId) })
       .then((res) => {
         setCategoryOptions(res.data);
         // If no categories for this make, clear selectedCategoryId
@@ -397,7 +397,7 @@ const DefectiveReport = () => {
 
         let makes = makeOptions;
         if (!makes || makes.length === 0) {
-          const makeRes = await axios.get('http://localhost:5000/make-helper');
+          const makeRes = await axios.get('https://kdstocksoft.onrender.com/make-helper');
           makes = makeRes.data;
         }
 
@@ -425,7 +425,7 @@ const DefectiveReport = () => {
 
         for (const make of orderedMakes) {
           const params = { makeId: make.Id };
-          const response = await axios.get('http://localhost:5000/defective', { params });
+          const response = await axios.get('https://kdstocksoft.onrender.com/defective', { params });
           const data = response.data;
 
           if (data && data.length > 0) {
@@ -477,7 +477,7 @@ const DefectiveReport = () => {
 
         let response;
         try {
-          response = await axios.get('http://localhost:5000/defective', { params });
+          response = await axios.get('https://kdstocksoft.onrender.com/defective', { params });
         } catch (err) {
           setLoading(false);
           Swal.fire({

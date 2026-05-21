@@ -30,7 +30,7 @@ const Warehouse = () => {
     ];
 
     const rowsPerPage = 10;
-    const API_URL = 'http://localhost:5000/warehouse';
+    const API_URL = 'https://kdstocksoft.onrender.com/warehouse';
 
     useEffect(() => {
         // Fetch user info from localStorage

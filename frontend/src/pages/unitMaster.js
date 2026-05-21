@@ -27,7 +27,7 @@ const UnitMaster = () => {
     ];
 
     const rowsPerPage = 10;
-    const API_URL = 'http://localhost:5000/unit';
+    const API_URL = 'https://kdstocksoft.onrender.com/unit';
 
     useEffect(() => {
         // Fetch user info from localStorage

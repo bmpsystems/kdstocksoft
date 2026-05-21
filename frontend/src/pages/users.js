@@ -58,14 +58,14 @@ const Users = () => {
   ];
 
   const rowsPerPage = 10;
-  const API_URL = 'http://localhost:5000/users';
+  const API_URL = 'https://kdstocksoft.onrender.com/users';
 
   useEffect(() => {
     const fetchOptions = async () => {
       try {
         const [deptRes, roleRes] = await Promise.all([
-          axios.get(`http://localhost:5000/department`),
-          axios.get(`http://localhost:5000/user-role`)
+          axios.get(`https://kdstocksoft.onrender.com/department`),
+          axios.get(`https://kdstocksoft.onrender.com/user-role`)
         ]);
         setDropdownOptions(deptRes.data); // Assuming response is an array
         setRoleOptions(roleRes.data); // Assuming response is an array
@@ -125,8 +125,8 @@ const Users = () => {
       // Only fetch if dropdownOptions or roleOptions is empty
       if ((!dropdownOptions || dropdownOptions.length === 0) || (!roleOptions || roleOptions.length === 0)) {
         Promise.all([
-          axios.get(`http://localhost:5000/department`),
-          axios.get(`http://localhost:5000/user-role`)
+          axios.get(`https://kdstocksoft.onrender.com/department`),
+          axios.get(`https://kdstocksoft.onrender.com/user-role`)
         ])
           .then(([deptRes, roleRes]) => {
             setDropdownOptions(deptRes.data);

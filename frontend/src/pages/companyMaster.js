@@ -73,7 +73,7 @@ const CompanyMaster = () => {
     ];
 
     const rowsPerPage = 10;
-    const API_URL = 'http://localhost:5000/company';
+    const API_URL = 'https://kdstocksoft.onrender.com/company';
 
     useEffect(() => {
 
@@ -92,10 +92,10 @@ const CompanyMaster = () => {
         const fetchDropdowns = async () => {
             try {
                 const [catRes, regRes, typeRes, addByRes] = await Promise.all([
-                    axios.get('http://localhost:5000/category'),
-                    axios.get('http://localhost:5000/region'),
-                    axios.get('http://localhost:5000/type'),
-                    axios.get('http://localhost:5000/user-helper'),
+                    axios.get('https://kdstocksoft.onrender.com/category'),
+                    axios.get('https://kdstocksoft.onrender.com/region'),
+                    axios.get('https://kdstocksoft.onrender.com/type'),
+                    axios.get('https://kdstocksoft.onrender.com/user-helper'),
                 ]);
                 setCategoryOptions(catRes.data);
                 setRegionOptions(regRes.data);

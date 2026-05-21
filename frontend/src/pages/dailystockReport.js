@@ -25,7 +25,7 @@ const DailyStockReport = () => {
   // Fetch Make options
   useEffect(() => {
     axios
-      .get('http://localhost:5000/make-helper')
+      .get('https://kdstocksoft.onrender.com/make-helper')
       .then((res) => setMakeOptions(res.data))
       .catch(() => setMakeOptions([]));
   }, []);
@@ -38,7 +38,7 @@ const DailyStockReport = () => {
       return;
     }
     axios
-      .post('http://localhost:5000/product-category-helper', { make_Id: Number(selectedMakeId) })
+      .post('https://kdstocksoft.onrender.com/product-category-helper', { make_Id: Number(selectedMakeId) })
       .then((res) => {
         setCategoryOptions(res.data);
         // If no categories for this make, clear selectedCategoryId
@@ -485,7 +485,7 @@ const DailyStockReport = () => {
       let stockSummaryData = [];
       if (reportType === 'full') {
         try {
-          const resp = await axios.get('http://localhost:5000/stock-summary');
+          const resp = await axios.get('https://kdstocksoft.onrender.com/stock-summary');
           stockSummaryData = resp.data || [];
         } catch (err) {
           Swal.fire({
@@ -511,7 +511,7 @@ const DailyStockReport = () => {
 
         let makes = makeOptions;
         if (!makes || makes.length === 0) {
-          const makeRes = await axios.get('http://localhost:5000/make-helper');
+          const makeRes = await axios.get('https://kdstocksoft.onrender.com/make-helper');
           makes = makeRes.data;
         }
 
@@ -533,7 +533,7 @@ const DailyStockReport = () => {
 
         for (const make of orderedMakes) {
           const params = { makeId: make.Id };
-          const response = await axios.get('http://localhost:5000/stock-list', { params });
+          const response = await axios.get('https://kdstocksoft.onrender.com/stock-list', { params });
           const data = response.data;
 
           if (data && data.length > 0) {
@@ -578,7 +578,7 @@ const DailyStockReport = () => {
         });
         let response;
         try {
-          response = await axios.get('http://localhost:5000/stock-list', { params });
+          response = await axios.get('https://kdstocksoft.onrender.com/stock-list', { params });
         } catch (err) {
           setLoading(false);
           Swal.fire({

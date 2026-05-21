@@ -108,19 +108,19 @@ const CustomerMaster = () => {
     ];
 
     const rowsPerPage = 10;
-    const API_URL = 'http://localhost:5000/customer';
+    const API_URL = 'https://kdstocksoft.onrender.com/customer';
 
     // Fetch dropdowns and helpers
     useEffect(() => {
         const fetchHelpers = async () => {
             try {
                 const [categoryRes, typeRes, regionRes, desigRes, salutRes, addbyRes] = await Promise.all([
-                    axios.get('http://localhost:5000/category'),
-                    axios.get('http://localhost:5000/type'),
-                    axios.get('http://localhost:5000/region'),
-                    axios.get('http://localhost:5000/designation'),
-                    axios.get('http://localhost:5000/salutation'),
-                    axios.get('http://localhost:5000/user-helper'),
+                    axios.get('https://kdstocksoft.onrender.com/category'),
+                    axios.get('https://kdstocksoft.onrender.com/type'),
+                    axios.get('https://kdstocksoft.onrender.com/region'),
+                    axios.get('https://kdstocksoft.onrender.com/designation'),
+                    axios.get('https://kdstocksoft.onrender.com/salutation'),
+                    axios.get('https://kdstocksoft.onrender.com/user-helper'),
                 ]);
                 setCategoryOptions(categoryRes.data);
                 setTypeOptions(typeRes.data);
@@ -188,7 +188,7 @@ const CustomerMaster = () => {
         const fetchSuggestionsComp = async () => {
             if (queryComp.length >= 3 && queryComp !== selectedComp?.Company) {
                 try {
-                    const response = await axios.get(`http://localhost:5000/company-search?query=${queryComp}`);
+                    const response = await axios.get(`https://kdstocksoft.onrender.com/company-search?query=${queryComp}`);
                     setSuggestionsComp(response.data);
                 } catch (error) {
                     console.error('Error fetching suggestions:', error);
@@ -208,7 +208,7 @@ const CustomerMaster = () => {
         if (editQueryComp.length >= 3 && editQueryComp !== editSelectedComp?.Company) {
             const fetchEditSuggestions = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:5000/company-search?query=${editQueryComp}`);
+                    const response = await axios.get(`https://kdstocksoft.onrender.com/company-search?query=${editQueryComp}`);
                     setEditSuggestionsComp(response.data);
                 } catch (error) {
                     console.error('Error fetching edit suggestions:', error);

@@ -87,7 +87,7 @@ const DailyStockOut = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:5000/make-helper')
+      .get('https://kdstocksoft.onrender.com/make-helper')
       .then((res) => setMakeOptions(res.data))
       .catch(() => setMakeOptions([]));
   }, []);
@@ -99,7 +99,7 @@ const DailyStockOut = () => {
       return;
     }
     axios
-      .post('http://localhost:5000/product-category-helper', { make_Id: Number(selectedMakeId) })
+      .post('https://kdstocksoft.onrender.com/product-category-helper', { make_Id: Number(selectedMakeId) })
       .then((res) => {
         setCategoryOptions(res.data);
         if (!res.data || res.data.length === 0) {
@@ -729,7 +729,7 @@ const DailyStockOut = () => {
         const workbook = new ExcelJS.Workbook();
         let makes = makeOptions;
         if (!makes || makes.length === 0) {
-          const makeRes = await axios.get('http://localhost:5000/make-helper');
+          const makeRes = await axios.get('https://kdstocksoft.onrender.com/make-helper');
           makes = makeRes.data;
         }
         let foundAnyData = false;
@@ -742,7 +742,7 @@ const DailyStockOut = () => {
           if (fromDate) payload.fromDate = fromDate;
           if (toDate) payload.toDate = toDate;
           // REMOVED: if (deptId !== 5 && userName) payload.name = userName;
-          const response = await axios.post('http://localhost:5000/daily-stock-out', payload);
+          const response = await axios.post('https://kdstocksoft.onrender.com/daily-stock-out', payload);
           const data = response.data;
 
           if (data && data.length > 0) {
@@ -902,7 +902,7 @@ const DailyStockOut = () => {
         if (toDate) params.toDate = toDate;
         // REMOVED: if (deptId !== 5 && userName) params.name = userName;
 
-        const response = await axios.post('http://localhost:5000/daily-stock-out', params);
+        const response = await axios.post('https://kdstocksoft.onrender.com/daily-stock-out', params);
         const data = response.data;
 
         if (!data || data.length === 0) {

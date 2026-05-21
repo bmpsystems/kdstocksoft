@@ -16,7 +16,7 @@ const DefectiveItems = () => {
     const [godownName, setGodownName] = useState(''); // New state for godown name
     const [totalAmount, setTotalAmount] = useState(0); // New state for total amount
 
-    const API_URL = 'http://localhost:5000/';
+    const API_URL = 'https://kdstocksoft.onrender.com/';
 
     // Define column widths for each column (in px or %)
     const columnWidths = [
@@ -42,7 +42,7 @@ const DefectiveItems = () => {
     // Fetch make options
     useEffect(() => {
         axios
-            .get('http://localhost:5000/make-helper')
+            .get('https://kdstocksoft.onrender.com/make-helper')
             .then((res) => {
                 setMakeOptions(res.data);
                 if (res.data.length > 0) {
@@ -55,7 +55,7 @@ const DefectiveItems = () => {
     // Fetch warehouse options
     useEffect(() => {
         axios
-            .get('http://localhost:5000/Warehouse')
+            .get('https://kdstocksoft.onrender.com/Warehouse')
             .then((res) => {
                 setWarehouseOptions(res.data);
             })
@@ -74,7 +74,7 @@ const DefectiveItems = () => {
         }
 
         axios
-            .post('http://localhost:5000/product-category-helper', {
+            .post('https://kdstocksoft.onrender.com/product-category-helper', {
                 make_Id: Number(selectedMakeId),
             })
             .then((res) => {
@@ -115,7 +115,7 @@ const DefectiveItems = () => {
                     params.Whouse_Id = selectedWarehouseId;
                 }
 
-                const response = await axios.get('http://localhost:5000/defective', { params });
+                const response = await axios.get('https://kdstocksoft.onrender.com/defective', { params });
 
                 setStockData(response.data);
 

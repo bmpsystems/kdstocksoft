@@ -36,7 +36,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      const res = await axios.post('http://localhost:5000/login', {
+      const res = await axios.post('https://kdstocksoft.onrender.com/login', {
         username: username.trim(),
         // password: SHA256(password).toString(),
         password: password,
@@ -135,7 +135,7 @@ function Login() {
 
     try {
 
-      const res = await axios.post('http://localhost:5000/newuser', {
+      const res = await axios.post('https://kdstocksoft.onrender.com/newuser', {
         username: trimmedUsername,
         tempPassword,
         department: null
@@ -191,7 +191,7 @@ function Login() {
     }
 
     try {
-      const res = await axios.post('http://localhost:5000/check-user-exists', {
+      const res = await axios.post('https://kdstocksoft.onrender.com/check-user-exists', {
         username: trimmedEmail
       });
 
@@ -219,7 +219,7 @@ function Login() {
   };
 
   const handleVerifyOtp = async () => {
-    const res = await axios.post('http://localhost:5000/verify-otp', {
+    const res = await axios.post('https://kdstocksoft.onrender.com/verify-otp', {
       username: forgotEmail.trim(),
       otp
     });
@@ -256,7 +256,7 @@ function Login() {
     }
 
     try {
-      await axios.post('http://localhost:5000/reset-password', {
+      await axios.post('https://kdstocksoft.onrender.com/reset-password', {
         Username: email,
         OldPassword: '', // No old password required for forgot flow
         NewPassword: resetNewPassword,

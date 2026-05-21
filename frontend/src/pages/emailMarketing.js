@@ -203,9 +203,9 @@ const EmailMarketing = () => {
     const fetchHelpers = async () => {
       try {
         const [categoryRes, typeRes, regionRes] = await Promise.all([
-          axios.get("http://localhost:5000/category"),
-          axios.get("http://localhost:5000/type"),
-          axios.get("http://localhost:5000/region"),
+          axios.get("https://kdstocksoft.onrender.com/category"),
+          axios.get("https://kdstocksoft.onrender.com/type"),
+          axios.get("https://kdstocksoft.onrender.com/region"),
         ]);
         setCategoryOptions(categoryRes.data);
         setTypeOptions(typeRes.data);
@@ -222,7 +222,7 @@ const EmailMarketing = () => {
     const fetchCustomers = async () => {
       try {
         // Fetch a large result set (pagination optional)
-        const res = await axios.get("http://localhost:5000/customer", {
+        const res = await axios.get("https://kdstocksoft.onrender.com/customer", {
           params: {
             // Empty params returns all by default
           },

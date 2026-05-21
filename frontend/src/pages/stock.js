@@ -15,7 +15,7 @@ const Stock = () => {
     const [selectedWarehouseId, setSelectedWarehouseId] = useState('');
     const [godownName, setGodownName] = useState(''); // New state for godown name
 
-    const API_URL = 'http://localhost:5000/';
+    const API_URL = 'https://kdstocksoft.onrender.com/';
 
     // Define column widths for each column (in px or %)
     const columnWidths = [
@@ -43,7 +43,7 @@ const Stock = () => {
     // Fetch make options
     useEffect(() => {
         axios
-            .get('http://localhost:5000/make-helper')
+            .get('https://kdstocksoft.onrender.com/make-helper')
             .then((res) => {
                 setMakeOptions(res.data);
                 // Don't set default makeId here, let user select
@@ -54,7 +54,7 @@ const Stock = () => {
     // Fetch warehouse options
     useEffect(() => {
         axios
-            .get('http://localhost:5000/Warehouse')
+            .get('https://kdstocksoft.onrender.com/Warehouse')
             .then((res) => {
                 setWarehouseOptions(res.data);
             })
@@ -73,7 +73,7 @@ const Stock = () => {
         }
 
         axios
-            .post('http://localhost:5000/product-category-helper', {
+            .post('https://kdstocksoft.onrender.com/product-category-helper', {
                 make_Id: Number(selectedMakeId),
             })
             .then((res) => {
@@ -113,7 +113,7 @@ const Stock = () => {
                     params.Whouse_Id = selectedWarehouseId;
                 }
 
-                const response = await axios.get('http://localhost:5000/stock-list', { params });
+                const response = await axios.get('https://kdstocksoft.onrender.com/stock-list', { params });
                 setStockData(response.data);
 
                 // Set godown name if available

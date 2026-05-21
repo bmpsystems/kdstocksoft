@@ -27,7 +27,7 @@ const CategoryMaster = () => {
     ];
 
     const rowsPerPage = 10;
-    const API_URL = 'http://localhost:5000/category';
+    const API_URL = 'https://kdstocksoft.onrender.com/category';
 
     useEffect(() => {
         // Fetch user info from localStorage

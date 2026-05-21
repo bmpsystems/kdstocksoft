@@ -28,7 +28,7 @@ const DailyStockIn = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:5000/make-helper')
+      .get('https://kdstocksoft.onrender.com/make-helper')
       .then((res) => setMakeOptions(res.data))
       .catch(() => setMakeOptions([]));
   }, []);
@@ -40,7 +40,7 @@ const DailyStockIn = () => {
       return;
     }
     axios
-      .post('http://localhost:5000/product-category-helper', { make_Id: Number(selectedMakeId) })
+      .post('https://kdstocksoft.onrender.com/product-category-helper', { make_Id: Number(selectedMakeId) })
       .then((res) => {
         setCategoryOptions(res.data);
         if (!res.data || res.data.length === 0) {
@@ -331,7 +331,7 @@ const DailyStockIn = () => {
         const workbook = new ExcelJS.Workbook();
         let makes = makeOptions;
         if (!makes || makes.length === 0) {
-          const makeRes = await axios.get('http://localhost:5000/make-helper');
+          const makeRes = await axios.get('https://kdstocksoft.onrender.com/make-helper');
           makes = makeRes.data;
         }
 
@@ -343,7 +343,7 @@ const DailyStockIn = () => {
           if (invoiceDate) payload.inv_date = invoiceDate;
           if (creditNoteDate) payload.credit_date = creditNoteDate;
 
-          const response = await axios.post('http://localhost:5000/daily-stock-in', payload);
+          const response = await axios.post('https://kdstocksoft.onrender.com/daily-stock-in', payload);
           const data = response.data;
 
           if (data && data.length > 0) {
@@ -414,7 +414,7 @@ const DailyStockIn = () => {
         if (invoiceDate) params.inv_date = invoiceDate;
         if (creditNoteDate) params.credit_date = creditNoteDate;
 
-        const response = await axios.post('http://localhost:5000/daily-stock-in', params);
+        const response = await axios.post('https://kdstocksoft.onrender.com/daily-stock-in', params);
         const data = response.data;
 
         if (!data || data.length === 0) {

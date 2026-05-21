@@ -194,7 +194,7 @@ function MyProfile() {
             setErrorActivities(null);
 
             // Construct the API URL. Adjust 'http://localhost:3001' if your backend is on a different port/host.
-            const apiUrl = `http://localhost:5000/activities/${storedUsername}`;
+            const apiUrl = `https://kdstocksoft.onrender.com/activities/${storedUsername}`;
 
             try {
                 const response = await fetch(apiUrl);

@@ -27,7 +27,7 @@ const TypeMaster = () => {
     ];
 
     const rowsPerPage = 10;
-    const API_URL = 'http://localhost:5000/type';
+    const API_URL = 'https://kdstocksoft.onrender.com/type';
 
     useEffect(() => {
         // Fetch user info from localStorage

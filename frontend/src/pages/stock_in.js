@@ -14,7 +14,7 @@ import {
     ListGroup,
 } from 'react-bootstrap';
 
-const API_URL = 'http://localhost:5000/stock-in';
+const API_URL = 'https://kdstocksoft.onrender.com/stock-in';
 
 const fullScreenDialogStyles = {
     overlay: {
@@ -259,7 +259,7 @@ const StockIn = () => {
     useEffect(() => {
         const fetchWarehouses = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/warehouse');
+                const res = await axios.get('https://kdstocksoft.onrender.com/warehouse');
                 setWarehouses(Array.isArray(res.data) ? res.data : []);
             } catch (err) {
                 setWarehouses([]);
@@ -316,7 +316,7 @@ const StockIn = () => {
         ) {
             const fetchSuggestions = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:5000/company-search?query=${companyQuery}`);
+                    const response = await axios.get(`https://kdstocksoft.onrender.com/company-search?query=${companyQuery}`);
                     setCompanySuggestions(response.data);
                 } catch (error) {
                     setCompanySuggestions([]);
@@ -338,7 +338,7 @@ const StockIn = () => {
         ) {
             const fetchSuggestions = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:5000/product-search?query=${productQuery}`);
+                    const response = await axios.get(`https://kdstocksoft.onrender.com/product-search?query=${productQuery}`);
                     setProductSuggestions(
                         Array.isArray(response.data)
                             ? response.data.map(item => ({

@@ -13,7 +13,7 @@ import {
   Spinner,
 } from 'react-bootstrap';
 
-const PRODUCT_CATEGORY_API = 'http://localhost:5000/product-category-helper'; // <-- Use this for product category
+const PRODUCT_CATEGORY_API = 'https://kdstocksoft.onrender.com/product-category-helper'; // <-- Use this for product category
 
 const ProductMaster = () => {
   const [products, setProducts] = useState([]);
@@ -48,7 +48,7 @@ const ProductMaster = () => {
   ];
 
   const rowsPerPage = 10;
-  const API_URL = 'http://localhost:5000/products';
+  const API_URL = 'https://kdstocksoft.onrender.com/products';
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('name');
@@ -100,9 +100,9 @@ const ProductMaster = () => {
   const openEditModal = (product) => {
     if (product.Active === 1) {
       Promise.all([
-        axios.get('http://localhost:5000/make-helper'),
-        axios.get('http://localhost:5000/warehouse'),
-        axios.get('http://localhost:5000/unit'),
+        axios.get('https://kdstocksoft.onrender.com/make-helper'),
+        axios.get('https://kdstocksoft.onrender.com/warehouse'),
+        axios.get('https://kdstocksoft.onrender.com/unit'),
       ])
         .then(([makeRes, warehouseRes, unitRes]) => {
           const makes = Array.isArray(makeRes.data) ? makeRes.data : [];
@@ -355,9 +355,9 @@ const ProductMaster = () => {
     const fetchOptions = async () => {
       try {
         const [makeRes, warehouseRes, unitRes] = await Promise.all([
-          axios.get('http://localhost:5000/make-helper'),
-          axios.get('http://localhost:5000/warehouse'),
-          axios.get('http://localhost:5000/unit'),
+          axios.get('https://kdstocksoft.onrender.com/make-helper'),
+          axios.get('https://kdstocksoft.onrender.com/warehouse'),
+          axios.get('https://kdstocksoft.onrender.com/unit'),
         ]);
         const makes = Array.isArray(makeRes.data) ? makeRes.data : [];
         const warehouses = Array.isArray(warehouseRes.data) ? warehouseRes.data : [];

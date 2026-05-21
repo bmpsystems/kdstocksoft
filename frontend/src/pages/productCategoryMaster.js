@@ -29,8 +29,8 @@ const ProductCategoryMaster = () => {
     ];
 
     const rowsPerPage = 10;
-    const API_URL = 'http://localhost:5000/product-category';
-    const MAKE_API_URL = 'http://localhost:5000/make-helper';
+    const API_URL = 'https://kdstocksoft.onrender.com/product-category';
+    const MAKE_API_URL = 'https://kdstocksoft.onrender.com/make-helper';
 
     useEffect(() => {
         // Fetch user info from localStorage

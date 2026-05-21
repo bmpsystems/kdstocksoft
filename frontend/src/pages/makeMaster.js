@@ -24,7 +24,7 @@ const MakeMaster = () => {
     ];
 
     const rowsPerPage = 10;
-    const API_URL = 'http://localhost:5000/make';
+    const API_URL = 'https://kdstocksoft.onrender.com/make';
 
     useEffect(() => {
         const storedUsername = localStorage.getItem('name');

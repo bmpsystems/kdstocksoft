@@ -32,7 +32,7 @@ const PasswordChange = () => {
       const username = user?.username;
       const department = user?.dept_Id;
 
-      const res = await fetch('http://localhost:5000/update-password', {
+      const res = await fetch('https://kdstocksoft.onrender.com/update-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

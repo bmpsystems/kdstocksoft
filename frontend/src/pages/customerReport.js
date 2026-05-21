@@ -37,7 +37,7 @@ const CustomerReport = () => {
     const [selectedType, setSelectedType] = useState('');
 
     useEffect(() => {
-        const API_URL = 'http://localhost:5000';
+        const API_URL = 'https://kdstocksoft.onrender.com';
         // Fetch categories
         axios.get(API_URL + '/category')
             .then(res => setCategories(res.data))
@@ -66,7 +66,7 @@ const CustomerReport = () => {
 
     const handleExcel = async () => {
         try {
-            const API_URL = 'http://localhost:5000';
+            const API_URL = 'https://kdstocksoft.onrender.com';
             // Prepare query params
             const params = {};
             if (selectedCategory) params.cat_Id = selectedCategory;
@@ -249,7 +249,7 @@ const CustomerReport = () => {
 
     const handlePDF = async () => {
         try {
-            const API_URL = 'http://localhost:5000';
+            const API_URL = 'https://kdstocksoft.onrender.com';
             // Prepare query params
             const params = {};
             if (selectedCategory) params.cat_Id = selectedCategory;

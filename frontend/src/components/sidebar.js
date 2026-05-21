@@ -24,7 +24,7 @@ const Sidebar = () => {
   
     if (!dept) return;
   
-    axios.get(`http://localhost:5000/menu-items/${dept}`)
+    axios.get(`https://kdstocksoft.onrender.com/menu-items/${dept}`)
       .then(res => {
         if (Array.isArray(res.data)) {
           setMenuItems(res.data);
