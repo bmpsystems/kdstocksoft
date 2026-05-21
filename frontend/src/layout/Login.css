@@ -1,0 +1,74 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f8f8f8;
+}
+
+.login-container {
+  display: flex;
+  min-height: 100vh;
+}
+ 
+.left-panel {
+  flex: 1;
+  padding: 80px 40px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.left-panel h2 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.left-panel p {
+  color: #666;
+  margin-bottom: 40px;
+}
+
+.left-panel input {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.left-panel button {
+  padding: 14px;
+  width: 100%;
+  background: #61F0D3;
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.left-panel button:hover {
+  opacity: 0.9;
+}
+
+.right-panel { 
+  flex: 1;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.right-panel .login-image {
+  width: 450px; /* adjust as needed */
+  height: auto;
+  object-fit: contain;
+}
+
+
+.error {
+  color: red;
+  margin-top: 10px;
+}

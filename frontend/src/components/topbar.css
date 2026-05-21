@@ -1,0 +1,67 @@
+.topbar {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  padding: 12px 20px;
+  background-color: #00d6ab;
+  position: relative;
+}
+
+.account-logo {
+  position: relative;
+  cursor: pointer;
+}
+
+.account-logo img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #333;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 42px;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  width: 120px;
+}
+
+.dropdown-item {
+  padding: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color:rgb(44, 62, 80);
+  color:white;
+}
+
+.user-info-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-text {
+  display: flex;
+  flex-direction: column;
+  align-items: right;
+}
+
+.username {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #000000;
+}
+
+.department {
+  font-size: 0.75rem;
+  color: #000000;
+}
