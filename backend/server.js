@@ -337,7 +337,7 @@ app.get('/products', async (req, res) => {
   ON pm.PCat_Id = pcm.Id AND pm.PCat_Id != 0
   join warehouse as w
   on pm.Whouse_Id = w.id
-  join Unit_master as um
+  join unit_master as um
   on pm.Unit_Id = um.Id
       
       `);
@@ -414,7 +414,7 @@ app.put('/products/:id', async (req, res) => {
   ON pm.PCat_Id = pcm.Id AND pm.PCat_Id != 0
   join warehouse as w
   on pm.Whouse_Id = w.id
-  join Unit_master as um
+  join unit_master as um
   on pm.Unit_Id = um.Id WHERE pm.Id = ?`, [id]);
     res.json(rows[0]); // Return updated product
   } catch (err) {
@@ -435,7 +435,7 @@ app.post('/products/toggle', async (req, res) => {
   ON pm.PCat_Id = pcm.Id AND pm.PCat_Id != 0
   join warehouse as w
   on pm.Whouse_Id = w.id
-  join Unit_master as um
+  join unit_master as um
   on pm.Unit_Id = um.Id WHERE pm.Id = ?`, [id]);
     res.json(rows[0]);
   } catch (err) {
@@ -3981,7 +3981,7 @@ app.post('/tag/toggle', async (req, res) => {
 app.get('/unit', async (req, res) => {
   try {
     const [rows] = await pool.execute(
-      'SELECT Id, Unit, Active FROM Unit_Master WHERE Active = 1'
+      'SELECT Id, Unit, Active FROM unit_master WHERE Active = 1'
     );
     res.json(rows);
   } catch (error) {
@@ -3995,7 +3995,7 @@ app.post('/unit/create', async (req, res) => {
   const { Unit, Created_By, Active } = req.body;
   try {
     const [result] = await pool.execute(
-      `INSERT INTO Unit_master (Unit, Created_By, Active)
+      `INSERT INTO unit_master (Unit, Created_By, Active)
        VALUES (?, ?, ?)`,
       [Unit, Created_By, Active ? 1 : 0]
     );
@@ -4017,11 +4017,11 @@ app.put('/unit/:id', async (req, res) => {
 
   try {
     await pool.execute(
-      `UPDATE Unit_master SET Unit = ?, Modified_By = ? WHERE Id = ?`,
+      `UPDATE unit_master SET Unit = ?, Modified_By = ? WHERE Id = ?`,
       [Unit, Modified_By, id]
     );
 
-    const [rows] = await pool.execute(`SELECT * FROM Unit_master WHERE Id = ?`, [id]);
+    const [rows] = await pool.execute(`SELECT * FROM unit_master WHERE Id = ?`, [id]);
     res.json(rows[0]); // Return updated product
   } catch (err) {
     res.status(500).json({ error: 'Error updating Unit', details: err.message });
@@ -4032,8 +4032,8 @@ app.put('/unit/:id', async (req, res) => {
 app.post('/unit/toggle', async (req, res) => {
   const { id } = req.body;
   try {
-    await pool.execute(`UPDATE Unit_master SET Active = NOT Active WHERE Id = ?`, [id]);
-    const [rows] = await pool.execute(`SELECT * FROM Unit_master WHERE Id = ?`, [id]);
+    await pool.execute(`UPDATE unit_master SET Active = NOT Active WHERE Id = ?`, [id]);
+    const [rows] = await pool.execute(`SELECT * FROM unit_master WHERE Id = ?`, [id]);
     res.json(rows[0]);
   } catch (err) {
     res.status(500).json({ error: 'Error toggling active state', details: err.message });
