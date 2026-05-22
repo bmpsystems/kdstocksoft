@@ -3644,7 +3644,7 @@ app.post('/product-category-helper', async (req, res) => {
   try {
     const [rows] = await pool.execute(
       `SELECT pcm.Id, pcm.Category, pcm.Make_Id, mm.Make, pcm.Active
-       FROM Product_Category_Master pcm
+       FROM product_category_master pcm
        JOIN make_master mm ON pcm.Make_Id = mm.Id
        WHERE pcm.Active = 1 and pcm.Make_Id = ?`,
       [make_Id]
@@ -3662,7 +3662,7 @@ app.get('/product-category', async (req, res) => {
   try {
     const [rows] = await pool.execute(
       `SELECT pcm.Id, pcm.Category, pcm.Make_Id, mm.Make, pcm.Active 
-      FROM Product_Category_Master pcm join make_master mm on pcm.Make_Id = mm.Id`
+      FROM product_category_master pcm join make_master mm on pcm.Make_Id = mm.Id`
     );
     res.json(rows);
   } catch (error) {
@@ -3676,7 +3676,7 @@ app.post('/product-category/create', async (req, res) => {
   const { Category, Make_Id, Created_By, Created_On, Active } = req.body;
   try {
     const [result] = await pool.execute(
-      `INSERT INTO Product_Category_Master (Category, Make_Id, Created_By, Created_On ,Active)
+      `INSERT INTO product_category_master (Category, Make_Id, Created_By, Created_On ,Active)
        VALUES (?, ?, ?, ?, ?)`,
       [Category, Make_Id, Created_By, Created_On, Active ? 1 : 0]
     );
@@ -3700,12 +3700,12 @@ app.put('/product-category/:id', async (req, res) => {
 
   try {
     await pool.execute(
-      `UPDATE Product_Category_Master SET Category = ?, Make_Id = ?, Modified_By = ?, Modified_On = ? WHERE Id = ?`,
+      `UPDATE product_category_master SET Category = ?, Make_Id = ?, Modified_By = ?, Modified_On = ? WHERE Id = ?`,
       [Category, Make_Id, Modified_By, Modified_On, id]
     );
 
     const [rows] = await pool.execute(`SELECT pcm.Id, pcm.Category, pcm.Make_Id, mm.Make, pcm.Active 
-      FROM Product_Category_Master pcm join make_master mm on pcm.Make_Id = mm.Id WHERE pcm.Id = ?`, [id]);
+      FROM product_category_master pcm join make_master mm on pcm.Make_Id = mm.Id WHERE pcm.Id = ?`, [id]);
     res.json(rows[0]); // Return updated product
   } catch (err) {
     res.status(500).json({ error: 'Error updating product category', details: err.message });
@@ -3716,9 +3716,9 @@ app.put('/product-category/:id', async (req, res) => {
 app.post('/product-category/toggle', async (req, res) => {
   const { id } = req.body;
   try {
-    await pool.execute(`UPDATE Product_Category_Master SET Active = NOT Active WHERE Id = ?`, [id]);
+    await pool.execute(`UPDATE product_category_master SET Active = NOT Active WHERE Id = ?`, [id]);
     const [rows] = await pool.execute(`SELECT pcm.Id, pcm.Category, pcm.Make_Id, mm.Make, pcm.Active 
-      FROM Product_Category_Master pcm join make_master mm on pcm.Make_Id = mm.Id WHERE pcm.Id = ?`, [id]);
+      FROM product_category_master pcm join make_master mm on pcm.Make_Id = mm.Id WHERE pcm.Id = ?`, [id]);
     res.json(rows[0]);
   } catch (err) {
     res.status(500).json({ error: 'Error toggling active state', details: err.message });
