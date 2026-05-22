@@ -193,7 +193,7 @@ function MyProfile() {
             setLoadingActivities(true);
             setErrorActivities(null);
 
-            // Construct the API URL. Adjust 'http://localhost:3001' if your backend is on a different port/host.
+            // Construct the API URL. Adjust 'https://kdstocksoft.vercel.app/' if your backend is on a different port/host.
             const apiUrl = `https://kdstocksoft.onrender.com/activities/${storedUsername}`;
 
             try {
