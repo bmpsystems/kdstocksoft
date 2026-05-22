@@ -3561,7 +3561,7 @@ app.post('/category/toggle', async (req, res) => {
 app.get('/warehouse', async (req, res) => {
   try {
     const [rows] = await pool.execute(
-      'SELECT * FROM Warehouse WHERE Active = 1'
+      'SELECT * FROM warehouse WHERE Active = 1'
     );
     res.json(rows);
   } catch (error) {
@@ -3575,7 +3575,7 @@ app.post('/warehouse/create', async (req, res) => {
   const { Name, Manager, Location, Phone, Created_By, Created_On, Active } = req.body;
   try {
     const [result] = await pool.execute(
-      `INSERT INTO Warehouse (Name, Manager, Location, Phone, Created_By, Created_On ,Active)
+      `INSERT INTO warehouse (Name, Manager, Location, Phone, Created_By, Created_On ,Active)
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [Name, Manager, Location, Phone, Created_By, Created_On, Active ? 1 : 0]
     );

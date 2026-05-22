@@ -39,7 +39,7 @@ import UnitMaster from './pages/unitMaster';
 import LoginDetails from './pages/loginDetails';
 import LocationMaster from './pages/locationMaster';
 import PasswordChange from './pages/passwordChange';
-import WareHouse from './pages/warehouse';
+import warehouse from './pages/warehouse';
 import AssignMaster from './pages/assignMaster';
 import EnquiryMaster from './pages/enquiryMaster';
 import MyProfile from './pages/myprofile';
@@ -72,7 +72,7 @@ function App() {
           <Route path="assign-master" element={<AssignMaster />} />
           <Route path="enquiry-master" element={<EnquiryMaster />} />
           <Route path="products-category" element={<ProductCategoryMaster />} />
-          <Route path="warehouse" element={<WareHouse />} />
+          <Route path="warehouse" element={<warehouse />} />
           <Route path="make" element={<MakeMaster />} />
           <Route path="state" element={<StateMaster />} />
           <Route path="country" element={<CountryMaster />} />
