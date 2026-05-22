@@ -3024,13 +3024,13 @@ app.get('/customer', async (req, res) => {
       cm.Active,
       cm.Created_On,
       cm.Modified_On
-    FROM Customer_master AS cm
+    FROM customer_master AS cm
     LEFT JOIN company_master AS comp ON cm.Comp_Id = comp.Id
-    LEFT JOIN Category_master AS catm ON comp.Cat_Id = catm.Id
-    LEFT JOIN Type_master AS typm ON comp.Type_Id = typm.Id
-    LEFT JOIN Region_master AS regm ON comp.Region_Id = regm.Id
-    LEFT JOIN Salutation_master AS sal ON cm.Salut_Id = sal.Id
-    LEFT JOIN Designation_master AS desm ON cm.Desig_Id = desm.Id
+    LEFT JOIN category_master AS catm ON comp.Cat_Id = catm.Id
+    LEFT JOIN type_master AS typm ON comp.Type_Id = typm.Id
+    LEFT JOIN region_master AS regm ON comp.Region_Id = regm.Id
+    LEFT JOIN salutation_master AS sal ON cm.Salut_Id = sal.Id
+    LEFT JOIN designation_master AS desm ON cm.Desig_Id = desm.Id
   `;
 
   const conditions = [];
@@ -3093,7 +3093,7 @@ app.post('/customer/create', async (req, res) => {
   }
 
   try {
-    // Get the Cat_Id for the given Comp_Id (do not save Cat_Id in Customer_master)
+    // Get the Cat_Id for the given Comp_Id (do not save Cat_Id in customer_master)
     const [companyRows] = await pool.execute(
       `SELECT Cat_Id FROM company_master WHERE Id = ?`,
       [Comp_Id]
@@ -3105,7 +3105,7 @@ app.post('/customer/create', async (req, res) => {
 
     // Check for duplicate Contact_person, Mobile_no, EmailId, Desig_Id
     const [dupRows] = await pool.execute(
-      `SELECT Id FROM Customer_master 
+      `SELECT Id FROM customer_master 
        WHERE 
          (Contact_person = ? OR Mobile_no = ? OR EmailId = ? OR Desig_Id = ?)
          AND Comp_Id = ?`,
@@ -3157,7 +3157,7 @@ on cm.Cat_Id = catm.id
 
     // Insert customer (do NOT save Cat_Id)
     const [result] = await pool.execute(
-      `INSERT INTO Customer_master (
+      `INSERT INTO customer_master (
         Code,
         Comp_Id,
         Salut_Id,
@@ -3229,7 +3229,7 @@ app.put('/customer/:id', async (req, res) => {
   try {
     // Check for duplicate Contact_person, Mobile_no, EmailId, Desig_Id (excluding current id)
     const [dupRows] = await pool.execute(
-      `SELECT Id FROM Customer_master 
+      `SELECT Id FROM customer_master 
        WHERE 
          (Contact_person = ? OR Mobile_no = ? OR EmailId = ? OR Desig_Id = ?)
          AND Comp_Id = ?
@@ -3259,7 +3259,7 @@ app.put('/customer/:id', async (req, res) => {
     ];
 
     await pool.execute(
-      `UPDATE Customer_master SET 
+      `UPDATE customer_master SET 
         Comp_Id = ?,
         Salut_Id = ?,
         Desig_Id = ?,
@@ -3297,13 +3297,13 @@ app.put('/customer/:id', async (req, res) => {
       cm.Active,
       cm.Created_On,
       cm.Modified_On
-    FROM Customer_master AS cm
+    FROM customer_master AS cm
     LEFT JOIN company_master AS comp ON cm.Comp_Id = comp.Id
-    LEFT JOIN Category_master AS catm ON comp.Cat_Id = catm.Id
-    LEFT JOIN Type_master AS typm ON comp.Type_Id = typm.Id
-    LEFT JOIN Region_master AS regm ON comp.Region_Id = regm.Id
-    LEFT JOIN Salutation_master AS sal ON cm.Salut_Id = sal.Id
-    LEFT JOIN Designation_master AS desm ON cm.Desig_Id = desm.Id
+    LEFT JOIN category_master AS catm ON comp.Cat_Id = catm.Id
+    LEFT JOIN type_master AS typm ON comp.Type_Id = typm.Id
+    LEFT JOIN region_master AS regm ON comp.Region_Id = regm.Id
+    LEFT JOIN salutation_master AS sal ON cm.Salut_Id = sal.Id
+    LEFT JOIN designation_master AS desm ON cm.Desig_Id = desm.Id
       WHERE cm.Id = ?`,
       [id]
     );
@@ -3318,7 +3318,7 @@ app.put('/customer/:id', async (req, res) => {
 app.post('/customer/toggle', async (req, res) => {
   const { id } = req.body;
   try {
-    await pool.execute(`UPDATE Customer_master SET Active = NOT Active WHERE Id = ?`, [id]);
+    await pool.execute(`UPDATE customer_master SET Active = NOT Active WHERE Id = ?`, [id]);
     const [rows] = await pool.execute(`SELECT 
       cm.Id, 
       cm.Code, 
@@ -3342,13 +3342,13 @@ app.post('/customer/toggle', async (req, res) => {
       cm.Active,
       cm.Created_On,
       cm.Modified_On
-    FROM Customer_master AS cm
+    FROM customer_master AS cm
     LEFT JOIN company_master AS comp ON cm.Comp_Id = comp.Id
-    LEFT JOIN Category_master AS catm ON comp.Cat_Id = catm.Id
-    LEFT JOIN Type_master AS typm ON comp.Type_Id = typm.Id
-    LEFT JOIN Region_master AS regm ON comp.Region_Id = regm.Id
-    LEFT JOIN Salutation_master AS sal ON cm.Salut_Id = sal.Id
-    LEFT JOIN Designation_master AS desm ON cm.Desig_Id = desm.Id where cm.Id = ?`, [id]);
+    LEFT JOIN category_master AS catm ON comp.Cat_Id = catm.Id
+    LEFT JOIN type_master AS typm ON comp.Type_Id = typm.Id
+    LEFT JOIN region_master AS regm ON comp.Region_Id = regm.Id
+    LEFT JOIN salutation_master AS sal ON cm.Salut_Id = sal.Id
+    LEFT JOIN designation_master AS desm ON cm.Desig_Id = desm.Id where cm.Id = ?`, [id]);
     res.json(rows[0]);
   } catch (err) {
     res.status(500).json({ error: 'Error toggling active state', details: err.message });
@@ -3359,7 +3359,7 @@ app.post('/customer/toggle', async (req, res) => {
 app.get('/user-helper', async (req, res) => {
   try {
     const [rows] = await pool.execute(
-      'SELECT name from Users WHERE Active = 1'
+      'SELECT name from users WHERE Active = 1'
     );
     res.json(rows);
   } catch (error) {
@@ -3372,7 +3372,7 @@ app.get('/user-helper', async (req, res) => {
 app.get('/region', async (req, res) => {
   try {
     const [rows] = await pool.execute(
-      'SELECT Id, Region, Active FROM Region_Master WHERE Active = 1'
+      'SELECT Id, Region, Active FROM region_master WHERE Active = 1'
     );
     res.json(rows);
   } catch (error) {
@@ -3386,7 +3386,7 @@ app.post('/region/create', async (req, res) => {
   const { Region, Created_By, Active } = req.body;
   try {
     const [result] = await pool.execute(
-      `INSERT INTO Region_master (Region, Created_By, Active)
+      `INSERT INTO region_master (Region, Created_By, Active)
        VALUES (?, ?, ?)`,
       [Region, Created_By, Active ? 1 : 0]
     );
@@ -3408,11 +3408,11 @@ app.put('/region/:id', async (req, res) => {
 
   try {
     await pool.execute(
-      `UPDATE Region_master SET Region = ?, Modified_By = ? WHERE Id = ?`,
+      `UPDATE region_master SET Region = ?, Modified_By = ? WHERE Id = ?`,
       [Region, Modified_By, id]
     );
 
-    const [rows] = await pool.execute(`SELECT * FROM Region_master WHERE Id = ?`, [id]);
+    const [rows] = await pool.execute(`SELECT * FROM region_master WHERE Id = ?`, [id]);
     res.json(rows[0]); // Return updated product
   } catch (err) {
     res.status(500).json({ error: 'Error updating region', details: err.message });
@@ -3423,8 +3423,8 @@ app.put('/region/:id', async (req, res) => {
 app.post('/region/toggle', async (req, res) => {
   const { id } = req.body;
   try {
-    await pool.execute(`UPDATE Region_master SET Active = NOT Active WHERE Id = ?`, [id]);
-    const [rows] = await pool.execute(`SELECT * FROM Region_master WHERE Id = ?`, [id]);
+    await pool.execute(`UPDATE region_master SET Active = NOT Active WHERE Id = ?`, [id]);
+    const [rows] = await pool.execute(`SELECT * FROM region_master WHERE Id = ?`, [id]);
     res.json(rows[0]);
   } catch (err) {
     res.status(500).json({ error: 'Error toggling active state', details: err.message });
@@ -3498,7 +3498,7 @@ app.post('/department/toggle', async (req, res) => {
 app.get('/category', async (req, res) => {
   try {
     const [rows] = await pool.execute(
-      'SELECT Id, Category, Active FROM Category_Master WHERE Active = 1'
+      'SELECT Id, Category, Active FROM category_master WHERE Active = 1'
     );
     res.json(rows);
   } catch (error) {
@@ -3512,7 +3512,7 @@ app.post('/category/create', async (req, res) => {
   const { Category, Created_By, Active } = req.body;
   try {
     const [result] = await pool.execute(
-      `INSERT INTO Category_master (Category, Created_By, Active)
+      `INSERT INTO category_master (Category, Created_By, Active)
        VALUES (?, ?, ?)`,
       [Category, Created_By, Active ? 1 : 0]
     );
@@ -3534,11 +3534,11 @@ app.put('/category/:id', async (req, res) => {
 
   try {
     await pool.execute(
-      `UPDATE Category_master SET Category = ?, Modified_By = ? WHERE Id = ?`,
+      `UPDATE category_master SET Category = ?, Modified_By = ? WHERE Id = ?`,
       [Category, Modified_By, id]
     );
 
-    const [rows] = await pool.execute(`SELECT * FROM Category_master WHERE Id = ?`, [id]);
+    const [rows] = await pool.execute(`SELECT * FROM category_master WHERE Id = ?`, [id]);
     res.json(rows[0]); // Return updated product
   } catch (err) {
     res.status(500).json({ error: 'Error updating Category', details: err.message });
@@ -3549,8 +3549,8 @@ app.put('/category/:id', async (req, res) => {
 app.post('/category/toggle', async (req, res) => {
   const { id } = req.body;
   try {
-    await pool.execute(`UPDATE Category_master SET Active = NOT Active WHERE Id = ?`, [id]);
-    const [rows] = await pool.execute(`SELECT * FROM Category_master WHERE Id = ?`, [id]);
+    await pool.execute(`UPDATE category_master SET Active = NOT Active WHERE Id = ?`, [id]);
+    const [rows] = await pool.execute(`SELECT * FROM category_master WHERE Id = ?`, [id]);
     res.json(rows[0]);
   } catch (err) {
     res.status(500).json({ error: 'Error toggling active state', details: err.message });
@@ -3729,7 +3729,7 @@ app.post('/product-category/toggle', async (req, res) => {
 app.get('/salutation', async (req, res) => {
   try {
     const [rows] = await pool.execute(
-      'SELECT Id, Salutation, Active FROM Salutation_Master WHERE Active = 1'
+      'SELECT Id, Salutation, Active FROM salutation_master WHERE Active = 1'
     );
     res.json(rows);
   } catch (error) {
@@ -3743,7 +3743,7 @@ app.post('/salutation/create', async (req, res) => {
   const { Salutation, Created_By, Active } = req.body;
   try {
     const [result] = await pool.execute(
-      `INSERT INTO Salutation_master (Salutation, Created_By, Active)
+      `INSERT INTO salutation_master (Salutation, Created_By, Active)
        VALUES (?, ?, ?)`,
       [Salutation, Created_By, Active ? 1 : 0]
     );
@@ -3765,11 +3765,11 @@ app.put('/salutation/:id', async (req, res) => {
 
   try {
     await pool.execute(
-      `UPDATE Salutation_master SET Salutation = ?, Modified_By = ? WHERE Id = ?`,
+      `UPDATE salutation_master SET Salutation = ?, Modified_By = ? WHERE Id = ?`,
       [Salutation, Modified_By, id]
     );
 
-    const [rows] = await pool.execute(`SELECT * FROM Salutation_master WHERE Id = ?`, [id]);
+    const [rows] = await pool.execute(`SELECT * FROM salutation_master WHERE Id = ?`, [id]);
     res.json(rows[0]); // Return updated product
   } catch (err) {
     res.status(500).json({ error: 'Error updating Salutation', details: err.message });
@@ -3780,8 +3780,8 @@ app.put('/salutation/:id', async (req, res) => {
 app.post('/salutation/toggle', async (req, res) => {
   const { id } = req.body;
   try {
-    await pool.execute(`UPDATE Salutation_master SET Active = NOT Active WHERE Id = ?`, [id]);
-    const [rows] = await pool.execute(`SELECT * FROM Salutation_master WHERE Id = ?`, [id]);
+    await pool.execute(`UPDATE salutation_master SET Active = NOT Active WHERE Id = ?`, [id]);
+    const [rows] = await pool.execute(`SELECT * FROM salutation_master WHERE Id = ?`, [id]);
     res.json(rows[0]);
   } catch (err) {
     res.status(500).json({ error: 'Error toggling active state', details: err.message });
@@ -3792,7 +3792,7 @@ app.post('/salutation/toggle', async (req, res) => {
 app.get('/type', async (req, res) => {
   try {
     const [rows] = await pool.execute(
-      'SELECT Id, Type, Active FROM Type_Master WHERE Active = 1'
+      'SELECT Id, Type, Active FROM type_master WHERE Active = 1'
     );
     res.json(rows);
   } catch (error) {
@@ -3806,7 +3806,7 @@ app.post('/type/create', async (req, res) => {
   const { Type, Created_By, Active } = req.body;
   try {
     const [result] = await pool.execute(
-      `INSERT INTO Type_master (Type, Created_By, Active)
+      `INSERT INTO type_master (Type, Created_By, Active)
        VALUES (?, ?, ?)`,
       [Type, Created_By, Active ? 1 : 0]
     );
@@ -3828,11 +3828,11 @@ app.put('/type/:id', async (req, res) => {
 
   try {
     await pool.execute(
-      `UPDATE Type_master SET Type = ?, Modified_By = ? WHERE Id = ?`,
+      `UPDATE type_master SET Type = ?, Modified_By = ? WHERE Id = ?`,
       [Type, Modified_By, id]
     );
 
-    const [rows] = await pool.execute(`SELECT * FROM Type_master WHERE Id = ?`, [id]);
+    const [rows] = await pool.execute(`SELECT * FROM type_master WHERE Id = ?`, [id]);
     res.json(rows[0]); // Return updated product
   } catch (err) {
     res.status(500).json({ error: 'Error updating Type', details: err.message });
@@ -3843,8 +3843,8 @@ app.put('/type/:id', async (req, res) => {
 app.post('/type/toggle', async (req, res) => {
   const { id } = req.body;
   try {
-    await pool.execute(`UPDATE Type_master SET Active = NOT Active WHERE Id = ?`, [id]);
-    const [rows] = await pool.execute(`SELECT * FROM Type_master WHERE Id = ?`, [id]);
+    await pool.execute(`UPDATE type_master SET Active = NOT Active WHERE Id = ?`, [id]);
+    const [rows] = await pool.execute(`SELECT * FROM type_master WHERE Id = ?`, [id]);
     res.json(rows[0]);
   } catch (err) {
     res.status(500).json({ error: 'Error toggling active state', details: err.message });
@@ -3855,7 +3855,7 @@ app.post('/type/toggle', async (req, res) => {
 app.get('/designation', async (req, res) => {
   try {
     const [rows] = await pool.execute(
-      'SELECT Id, Designation, Active FROM Designation_Master WHERE Active = 1'
+      'SELECT Id, Designation, Active FROM designation_master WHERE Active = 1'
     );
     res.json(rows);
   } catch (error) {
@@ -3869,7 +3869,7 @@ app.post('/designation/create', async (req, res) => {
   const { Designation, Created_By, Active } = req.body;
   try {
     const [result] = await pool.execute(
-      `INSERT INTO Designation_master (Designation, Created_By, Active)
+      `INSERT INTO designation_master (Designation, Created_By, Active)
        VALUES (?, ?, ?)`,
       [Designation, Created_By, Active ? 1 : 0]
     );
@@ -3891,11 +3891,11 @@ app.put('/designation/:id', async (req, res) => {
 
   try {
     await pool.execute(
-      `UPDATE Designation_master SET Designation = ?, Modified_By = ? WHERE Id = ?`,
+      `UPDATE designation_master SET Designation = ?, Modified_By = ? WHERE Id = ?`,
       [Designation, Modified_By, id]
     );
 
-    const [rows] = await pool.execute(`SELECT * FROM Designation_master WHERE Id = ?`, [id]);
+    const [rows] = await pool.execute(`SELECT * FROM designation_master WHERE Id = ?`, [id]);
     res.json(rows[0]); // Return updated product
   } catch (err) {
     res.status(500).json({ error: 'Error updating Designation', details: err.message });
@@ -3906,8 +3906,8 @@ app.put('/designation/:id', async (req, res) => {
 app.post('/designation/toggle', async (req, res) => {
   const { id } = req.body;
   try {
-    await pool.execute(`UPDATE Designation_master SET Active = NOT Active WHERE Id = ?`, [id]);
-    const [rows] = await pool.execute(`SELECT * FROM Designation_master WHERE Id = ?`, [id]);
+    await pool.execute(`UPDATE designation_master SET Active = NOT Active WHERE Id = ?`, [id]);
+    const [rows] = await pool.execute(`SELECT * FROM designation_master WHERE Id = ?`, [id]);
     res.json(rows[0]);
   } catch (err) {
     res.status(500).json({ error: 'Error toggling active state', details: err.message });
