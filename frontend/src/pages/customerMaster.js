@@ -950,10 +950,10 @@ const CustomerMaster = () => {
                     <option value="">User</option>
                     {AddbyOptions.map((option, idx) => (
                         <option
-                            key={option.username ? `${option.username}-${idx}` : `user-${idx}`}
-                            value={option.username}
+                            key={option.name ? `${option.name}-${idx}` : `user-${idx}`}
+                            value={option.name}
                         >
-                            {option.username}
+                            {option.name}
                         </option>
                     ))}
                 </select>
