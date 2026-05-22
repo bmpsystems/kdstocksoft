@@ -351,7 +351,7 @@ app.post('/products/create', async (req, res) => {
   const { Product_name, Model_no, Make_Id, Cost_price, List_price, Whouse_Id, Unit_Id, PCat_Id, HSNCode, Created_By, Active, } = req.body;
   try {
     const [result] = await pool.execute(
-      `INSERT INTO Product_master (Product_name, Model_no, Make_Id, Cost_price, List_price, Whouse_Id, Unit_Id, PCat_Id, HSNCode,
+      `INSERT INTO product_master (Product_name, Model_no, Make_Id, Cost_price, List_price, Whouse_Id, Unit_Id, PCat_Id, HSNCode,
       Created_By, Active)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [Product_name, Model_no, Make_Id, Cost_price, List_price, Whouse_Id, Unit_Id, PCat_Id, HSNCode, Created_By, Active ? 1 : 0]
@@ -393,7 +393,7 @@ app.put('/products/:id', async (req, res) => {
 
   try {
     await pool.execute(
-      `UPDATE Product_master SET Product_name = ?, Model_no = ?, Make_Id = ?, Cost_price = ?, List_price = ?, Whouse_Id = ?, Unit_Id = ?, PCat_Id = ?, HSNCode = ?, Modified_By = ? WHERE Id = ?`,
+      `UPDATE product_master SET Product_name = ?, Model_no = ?, Make_Id = ?, Cost_price = ?, List_price = ?, Whouse_Id = ?, Unit_Id = ?, PCat_Id = ?, HSNCode = ?, Modified_By = ? WHERE Id = ?`,
       [Product_name,
         Model_no,
         Make_Id,
@@ -426,7 +426,7 @@ app.put('/products/:id', async (req, res) => {
 app.post('/products/toggle', async (req, res) => {
   const { id } = req.body;
   try {
-    await pool.execute(`UPDATE Product_master SET Active = NOT Active WHERE Id = ?`, [id]);
+    await pool.execute(`UPDATE product_master SET Active = NOT Active WHERE Id = ?`, [id]);
     const [rows] = await pool.execute(` select pm.Id, pm.Product_name, pm.Model_no, pm.Make_Id, mm.Make, pm.PCat_Id, pcm.Category, pm.Cost_price, pm.List_price, 
      pm.Whouse_Id, w.name, pm.Unit_Id, um.Unit, pm.Active 
       from product_master as pm 
@@ -468,7 +468,7 @@ app.get('/product-search', async (req, res) => {
       a.Unit_Id,
       c.Unit,
       d.Name
-    FROM Product_master AS a
+    FROM product_master AS a
     LEFT JOIN make_master AS b ON a.Make_Id = b.Id
     LEFT JOIN unit_master AS c ON a.Unit_Id = c.Id
     LEFT JOIN warehouse AS d ON d.Id = a.Whouse_Id
@@ -2750,7 +2750,7 @@ app.post('/company/create', async (req, res) => {
   try {
     // Check for duplicate Company, Website, Pan, Gstin (case-insensitive, treat null/empty as '')
     const [dupRows] = await pool.execute(
-      `SELECT Id FROM Company_master 
+      `SELECT Id FROM company_master 
        WHERE LOWER(TRIM(Company)) = LOWER(TRIM(?))
          OR (COALESCE(NULLIF(TRIM(Website),''), '') <> '' AND LOWER(TRIM(Website)) = LOWER(TRIM(?)))
          OR (COALESCE(NULLIF(TRIM(Pan),''), '') <> '' AND LOWER(TRIM(Pan)) = LOWER(TRIM(?)))
@@ -2771,7 +2771,7 @@ app.post('/company/create', async (req, res) => {
     }
 
     const [result] = await pool.execute(
-      `INSERT INTO Company_master (Company, Address, Cat_Id, Region_Id, Type_Id, Created_By, Created_On, Website, Pan, Gstin, Internal_Note, Active)
+      `INSERT INTO company_master (Company, Address, Cat_Id, Region_Id, Type_Id, Created_By, Created_On, Website, Pan, Gstin, Internal_Note, Active)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [Company, Address, Cat_Id, Region_Id, Type_Id, Created_By, Created_On, Website, Pan, Gstin, Internal_Note, Active ? 1 : 0]
     );
@@ -2803,7 +2803,7 @@ app.put('/company/:id', async (req, res) => {
   try {
     // Check for duplicate Company, Website, Pan, Gstin (excluding current id)
     const [dupRows] = await pool.execute(
-      `SELECT Id FROM Company_master 
+      `SELECT Id FROM company_master 
        WHERE (LOWER(TRIM(Company)) = LOWER(TRIM(?))
               OR (COALESCE(NULLIF(TRIM(Website),''), '') <> '' AND LOWER(TRIM(Website)) = LOWER(TRIM(?)))
               OR (COALESCE(NULLIF(TRIM(Pan),''), '') <> '' AND LOWER(TRIM(Pan)) = LOWER(TRIM(?)))
@@ -2826,7 +2826,7 @@ app.put('/company/:id', async (req, res) => {
     }
 
     await pool.execute(
-      `UPDATE Company_master SET Company = ?, Address = ?, Cat_Id = ?,  Region_Id = ?,  Type_Id = ?, Website = ?, Pan = ?, Gstin = ?, Internal_Note = ?, Modified_By = ?, Modified_On = ?   WHERE Id = ?`,
+      `UPDATE company_master SET Company = ?, Address = ?, Cat_Id = ?,  Region_Id = ?,  Type_Id = ?, Website = ?, Pan = ?, Gstin = ?, Internal_Note = ?, Modified_By = ?, Modified_On = ?   WHERE Id = ?`,
       [Company, Address, Cat_Id, Region_Id, Type_Id, Website, Pan, Gstin, Internal_Note, Modified_By, Modified_On, id]
     );
 
@@ -2848,7 +2848,7 @@ app.put('/company/:id', async (req, res) => {
 app.post('/company/toggle', async (req, res) => {
   const { id } = req.body;
   try {
-    await pool.execute(`UPDATE Company_master SET Active = NOT Active WHERE Id = ?`, [id]);
+    await pool.execute(`UPDATE company_master SET Active = NOT Active WHERE Id = ?`, [id]);
     const [rows] = await pool.execute(`SELECT 
       cm.Id, cm.Company, cm.Address, cm.Cat_Id, catm.Category, 
       cm.Region_Id, regm.Region, cm.Type_Id, cm.Website, cm.Pan, cm.Gstin, cm.Internal_Note, typm.Type, cm.Active
@@ -3025,7 +3025,7 @@ app.get('/customer', async (req, res) => {
       cm.Created_On,
       cm.Modified_On
     FROM Customer_master AS cm
-    LEFT JOIN Company_master AS comp ON cm.Comp_Id = comp.Id
+    LEFT JOIN company_master AS comp ON cm.Comp_Id = comp.Id
     LEFT JOIN Category_master AS catm ON comp.Cat_Id = catm.Id
     LEFT JOIN Type_master AS typm ON comp.Type_Id = typm.Id
     LEFT JOIN Region_master AS regm ON comp.Region_Id = regm.Id
@@ -3095,7 +3095,7 @@ app.post('/customer/create', async (req, res) => {
   try {
     // Get the Cat_Id for the given Comp_Id (do not save Cat_Id in Customer_master)
     const [companyRows] = await pool.execute(
-      `SELECT Cat_Id FROM Company_master WHERE Id = ?`,
+      `SELECT Cat_Id FROM company_master WHERE Id = ?`,
       [Comp_Id]
     );
     if (!companyRows || companyRows.length === 0) {
@@ -3298,7 +3298,7 @@ app.put('/customer/:id', async (req, res) => {
       cm.Created_On,
       cm.Modified_On
     FROM Customer_master AS cm
-    LEFT JOIN Company_master AS comp ON cm.Comp_Id = comp.Id
+    LEFT JOIN company_master AS comp ON cm.Comp_Id = comp.Id
     LEFT JOIN Category_master AS catm ON comp.Cat_Id = catm.Id
     LEFT JOIN Type_master AS typm ON comp.Type_Id = typm.Id
     LEFT JOIN Region_master AS regm ON comp.Region_Id = regm.Id
@@ -3343,7 +3343,7 @@ app.post('/customer/toggle', async (req, res) => {
       cm.Created_On,
       cm.Modified_On
     FROM Customer_master AS cm
-    LEFT JOIN Company_master AS comp ON cm.Comp_Id = comp.Id
+    LEFT JOIN company_master AS comp ON cm.Comp_Id = comp.Id
     LEFT JOIN Category_master AS catm ON comp.Cat_Id = catm.Id
     LEFT JOIN Type_master AS typm ON comp.Type_Id = typm.Id
     LEFT JOIN Region_master AS regm ON comp.Region_Id = regm.Id
