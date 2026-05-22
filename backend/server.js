@@ -2462,7 +2462,7 @@ app.post('/stock-out/toggle', async (req, res) => {
 // LIST Make
 app.get('/make', async (req, res) => {
   try {
-    const [rows] = await pool.execute(`SELECT * FROM Make_master`);
+    const [rows] = await pool.execute(`SELECT * FROM make_master`);
     res.json(rows);
   } catch (err) {
     res.status(500).json({ error: 'Error fetching products', details: err.message });
@@ -2474,7 +2474,7 @@ app.post('/make/create', async (req, res) => {
   const { Make, Address, Cont_Person, Cont_No, Gstin, Created_By, Active, } = req.body;
   try {
     const [result] = await pool.execute(
-      `INSERT INTO Make_master (Make, Address, Cont_Person, Cont_No, Gstin, Created_By, Active)
+      `INSERT INTO make_master (Make, Address, Cont_Person, Cont_No, Gstin, Created_By, Active)
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [Make, Address, Cont_Person, Cont_No, Gstin, Created_By, Active ? 1 : 0]
     );
@@ -2500,11 +2500,11 @@ app.put('/make/:id', async (req, res) => {
 
   try {
     await pool.execute(
-      `UPDATE Make_master SET Make = ?, Address = ?, Cont_Person = ?, Cont_No = ?, Gstin = ?, Modified_By = ? WHERE Id = ?`,
+      `UPDATE make_master SET Make = ?, Address = ?, Cont_Person = ?, Cont_No = ?, Gstin = ?, Modified_By = ? WHERE Id = ?`,
       [Make, Address, Cont_Person, Cont_No, Gstin, Modified_By, id]
     );
 
-    const [rows] = await pool.execute(`SELECT * FROM Make_master WHERE Id = ?`, [id]);
+    const [rows] = await pool.execute(`SELECT * FROM make_master WHERE Id = ?`, [id]);
     res.json(rows[0]); // Return updated product
   } catch (err) {
     res.status(500).json({ error: 'Error updating product', details: err.message });
@@ -2515,8 +2515,8 @@ app.put('/make/:id', async (req, res) => {
 app.post('/make/toggle', async (req, res) => {
   const { id } = req.body;
   try {
-    await pool.execute(`UPDATE Make_master SET Active = NOT Active WHERE Id = ?`, [id]);
-    const [rows] = await pool.execute(`SELECT * FROM Make_master WHERE Id = ?`, [id]);
+    await pool.execute(`UPDATE make_master SET Active = NOT Active WHERE Id = ?`, [id]);
+    const [rows] = await pool.execute(`SELECT * FROM make_master WHERE Id = ?`, [id]);
     res.json(rows[0]);
   } catch (err) {
     res.status(500).json({ error: 'Error toggling active state', details: err.message });
@@ -2527,7 +2527,7 @@ app.post('/make/toggle', async (req, res) => {
 app.get('/make-helper', async (req, res) => {
   try {
     const [rows] = await pool.execute(
-      'SELECT Id, Make FROM Make_Master WHERE Active = 1'
+      'SELECT Id, Make FROM make_master WHERE Active = 1'
     );
     res.json(rows);
   } catch (error) {
