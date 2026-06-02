@@ -263,7 +263,7 @@ app.post('/update-password', async (req, res) => {
   try {
     // Fetch user by Username and Department
     const [rows] = await pool.execute(
-      'SELECT Password FROM Users WHERE Username = ? AND Dept_Id = ? and Active = 1',
+      'SELECT Password FROM users WHERE Username = ? AND Dept_Id = ? and Active = 1',
       [Username, Department]
     );
 
@@ -280,7 +280,7 @@ app.post('/update-password', async (req, res) => {
 
     // Update password using Username and Department as filters
     const [result] = await pool.execute(
-      'UPDATE Users SET Password = ? WHERE Username = ? AND Dept_Id = ? and Active = 1',
+      'UPDATE users SET Password = ? WHERE Username = ? AND Dept_Id = ? and Active = 1',
       [NewPassword, Username, Department]
     );
 
