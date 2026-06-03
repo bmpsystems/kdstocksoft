@@ -497,7 +497,7 @@ app.get('/stock-search', async (req, res) => {
 
   const sql = `
 SELECT 
-  st.Id, 
+  st.Prod_Id AS Id,
   pm.Product_name, 
   pm.Model_no, 
   pm.Cost_price, 
