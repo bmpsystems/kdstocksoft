@@ -2659,22 +2659,52 @@ LEFT JOIN product_category_master AS pcm ON pm.PCat_Id = pcm.Id AND pm.PCat_Id !
 
 //For Dashboard Stock In table
 app.get('/stock-in-dashboard', async (req, res) => {
-
-  const query = `
- SELECT si.Id, si.Purchase_Order, si.Purchase_Date,  si.Is_Return,si.Credit_No, si.Credit_Date, si.Org_InvNo, si.Org_Invdt,ppd.Prod_Id, pm.Product_name, pm.Model_no, pm.Make_Id, mm.Make, pm.Cost_Price, ppd.Quantity, si.Created_By, si.Created_On from stock_in si 
-JOIN product_purchase_details ppd 
-        ON ppd.Purchase_Order = si.Purchase_Order 
-        OR (ppd.Credit_No IS NOT NULL AND ppd.Credit_No = si.Org_InvNo)
-    join product_master pm on pm.Id = ppd.Prod_Id
-      join make_master mm on mm.Id = pm.Make_Id where si.Active = 1;
-`;
-
   try {
-    const [rows] = await pool.execute(query);
+    const [rows] = await pool.execute(`
+      SELECT
+        si.Id,
+        si.Purchase_Order,
+        si.Challan,
+        si.Purchase_Date,
+        si.Created_By,
+        ppd.Quantity,
+        pm.Product_name,
+        pm.Model_no,
+        mm.Make
+
+      FROM stock_in si
+
+      JOIN product_purchase_details ppd
+      ON (
+          (ppd.Purchase_Order = si.Purchase_Order AND ppd.Challan = si.Challan)
+          OR (
+              (ppd.Credit_No IS NOT NULL AND ppd.Credit_No = si.Credit_No)
+              OR (ppd.Purchase_Order IS NOT NULL AND ppd.Purchase_Order = si.Purchase_Order)
+              OR (ppd.Challan IS NOT NULL AND ppd.Challan = si.Challan)
+          )
+      )
+
+      JOIN product_master pm
+        ON pm.Id = ppd.Prod_Id
+
+      JOIN make_master mm
+        ON mm.Id = pm.Make_Id
+
+      WHERE si.Active = 1
+
+      ORDER BY
+        si.Id DESC,
+        si.Purchase_Date DESC
+
+      LIMIT 10
+    `);
+
     res.json(rows);
   } catch (err) {
-    console.error('SQL Error:', err.message);
-    res.status(500).json({ message: 'Internal server error', error: err.message });
+    console.error(err);
+    res.status(500).json({
+      error: err.message
+    });
   }
 });
 
