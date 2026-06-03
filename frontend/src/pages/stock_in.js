@@ -365,6 +365,42 @@ const StockIn = () => {
         }
     }, [productQuery, editProductIndex, productSearchStarted, productInputFocused]);
 
+    const wrapCellStyle = {
+    whiteSpace: "pre-wrap",
+    wordBreak: "break-word",
+    maxWidth: 180,
+    verticalAlign: "middle",
+  };
+
+  // Calculate total quantity
+  const getTotalQuantity = () => {
+    return productRows.reduce((sum, row) => {
+      const qty = Number(row.quantity);
+      return sum + (isNaN(qty) ? 0 : qty);
+    }, 0);
+  };
+
+  // Calculate total amount
+  const getTotalAmount = () => {
+    return productRows.reduce((sum, row) => {
+      const qty = Number(row.quantity);
+      const rate = Number(row.costPrice);
+      return sum + (isNaN(qty) || isNaN(rate) ? 0 : qty * rate);
+    }, 0);
+  };
+
+  // Get unit if all unitIds are the same and not empty, else return empty string
+  const getCommonUnit = () => {
+    if (productRows.length === 0) return "";
+    const firstUnitId = productRows[0].unitId;
+    if (!firstUnitId) return "";
+    for (let i = 1; i < productRows.length; i++) {
+      if (productRows[i].unitId !== firstUnitId) return "";
+    }
+    // All unitIds are the same, return the unit string (from first row)
+    return productRows[0].unit ? productRows[0].unit : "";
+  };
+
     // Handlers for Bill Details
     const handleBillChange = (e) => {
         const { name, value } = e.target;
@@ -1573,66 +1609,86 @@ const StockIn = () => {
                 </Row>
                 {/* Product Rows Table */}
                 <Row>
-                    <Col>
-                        <Table bordered hover responsive>
-                            <thead>
-                                <tr>
-                                    <th>Product Name</th>
-                                    <th>Model No</th>
-                                    <th>Make</th>
-                                    <th>Warehouse</th>
-                                    <th>Rate</th>
-                                    <th>Quantity</th>
-                                    <th>Remarks</th>
-                                    <th>Edit</th>
-                                    <th>Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {productRows.length === 0 ? (
-                                    <tr>
-                                        <td colSpan={9} className="text-center">No products added.</td>
-                                    </tr>
-                                ) : (
-                                    productRows.map((row, idx) => (
-                                        <tr key={idx}>
-                                            <td>{row.product.Product_name}</td>
-                                            <td>{row.modelNo || ''}</td>
-                                            <td>{row.make || ''}</td>
-                                            <td>{row.warehouse || ''}</td>
-                                            <td>{row.costPrice}</td>
-                                            <td>
-                                                {row.quantity}
-                                                {row.unit ? ` ${row.unit}` : ''}
-                                            </td>
-                                            <td>{row.remarks || ''}</td>
-                                            <td className="text-center">
-                                                <Button
-                                                    variant="outline-secondary"
-                                                    size="sm"
-                                                    onClick={() => handleEditProductRow(idx)}
-                                                    title="Edit"
-                                                >
-                                                    📝
-                                                </Button>
-                                            </td>
-                                            <td className="text-center">
-                                                <Button
-                                                    variant="outline-danger"
-                                                    size="sm"
-                                                    onClick={() => handleDeleteProductRow(idx)}
-                                                    title="Delete"
-                                                >
-                                                    🗑️
-                                                </Button>
-                                            </td>
-                                        </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </Table>
-                    </Col>
-                </Row>
+          <Col>
+            <Table bordered hover responsive>
+              <thead>
+                <tr>
+                  <th>Product Name</th>
+                  <th>Model No</th>
+                  <th>Make</th>
+                  <th>Warehouse</th>
+                  <th>Rate</th>
+                  <th>Quantity</th>
+                  <th>Remarks</th>
+                  <th>Edit</th>
+                  <th>Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                {productRows.length === 0 ? (
+                  <tr>
+                    <td colSpan={9} className="text-center">
+                      No products added.
+                    </td>
+                  </tr>
+                ) : (
+                  productRows.map((row, idx) => (
+                    <tr key={idx}>
+                      <td>{row.product.Product_name}</td>
+                      <td>{row.modelNo || ""}</td>
+                      <td>{row.make || ""}</td>
+                      <td>{row.warehouse || ""}</td>
+                      <td>{row.costPrice}</td>
+                      <td>
+                        {row.quantity}
+                        {row.unit ? ` ${row.unit}` : ""}
+                      </td>
+                      <td>{row.remarks || ""}</td>
+                      <td className="text-center">
+                        <Button
+                          variant="outline-secondary"
+                          size="sm"
+                          onClick={() => handleEditProductRow(idx)}
+                          title="Edit"
+                        >
+                          📝
+                        </Button>
+                      </td>
+                      <td className="text-center">
+                        <Button
+                          variant="outline-danger"
+                          size="sm"
+                          onClick={() => handleDeleteProductRow(idx)}
+                          title="Delete"
+                        >
+                          🗑️
+                        </Button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+
+                <tr>
+                  <td
+                    colSpan={5}
+                    style={{
+                      textAlign: "right",
+                      fontWeight: "bold",
+                      ...wrapCellStyle,
+                    }}
+                  >
+                    Total:
+                  </td>
+                  <td style={{ fontWeight: "bold", ...wrapCellStyle }}>
+                    {getTotalQuantity()}
+                    {getCommonUnit() ? ` ${getCommonUnit()}` : ""}
+                  </td>
+                  <td colSpan={3}></td>
+                </tr>
+              </tbody>
+            </Table>
+          </Col>
+        </Row>
                 <div style={fullScreenDialogStyles.footer}>
                     <Button variant="success" onClick={handleSubmit}>
                         {isEdit ? 'Update' : 'Submit'}
