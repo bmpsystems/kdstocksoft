@@ -20,7 +20,7 @@ const TopBar = () => {
 
   const handleLogout = () => {
     localStorage.clear(); // remove all keys
-    window.location.href = 'https://kdstocksoft.vercel.app/';
+    window.location.href = 'http://localhost:3000/';
   };
 
   const navigateMypofile = () => {
@@ -48,6 +48,10 @@ const TopBar = () => {
 
   return (
     <div className="topbar">
+      {/* Center Title */}
+    <div className="topbar-title">
+      KD Stock Software
+    </div>
       <div className="user-info-wrapper" ref={dropdownRef}>
         <div className="user-text">
           <span className="username">{username}</span>
@@ -111,7 +115,12 @@ const TopBar = () => {
         </div>
       </div>
     </div>
+
+    
   );
+
+  
 };
+
 
 export default TopBar;
