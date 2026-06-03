@@ -18,7 +18,18 @@ import "chart.js/auto";
 import QuickReportModal from "../components/QuickReportModal";
 
 // --- ICONS ---
-import { FaBoxOpen, FaExclamationTriangle, FaTimesCircle, FaRupeeSign, FaChartLine, FaChartPie, FaClipboardList, FaExchangeAlt, FaSearch, FaBolt } from "react-icons/fa";
+import {
+  FaBoxOpen,
+  FaExclamationTriangle,
+  FaTimesCircle,
+  FaRupeeSign,
+  FaChartLine,
+  FaChartPie,
+  FaClipboardList,
+  FaExchangeAlt,
+  FaSearch,
+  FaBolt,
+} from "react-icons/fa";
 import { MdInventory, MdReport } from "react-icons/md";
 import { IoMdTrendingUp, IoMdTrendingDown } from "react-icons/io";
 
@@ -26,7 +37,20 @@ const API_STOCK = "https://kdstocksoft.onrender.com/stock-dashboard";
 const API_STOCKIN = "https://kdstocksoft.onrender.com/stock-in-dashboard";
 const API_STOCKOUT = "https://kdstocksoft.onrender.com/stock-out-dashboard";
 const API_MINIMUM = "https://kdstocksoft.onrender.com/minimum-stock";
-const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const monthNames = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 
 const DashboardPg = () => {
   const [stock, setStock] = useState([]);
@@ -62,8 +86,9 @@ const DashboardPg = () => {
   const lowStockItems = minimumStock.length; // API returns only low stock
   const outOfStock = stock.filter((item) => Number(item.Quantity) === 0).length;
   const totalInventoryValue = stock.reduce(
-    (sum, item) => sum + (Number(item.Quantity) || 0) * (Number(item.Cost_Price) || 0),
-    0
+    (sum, item) =>
+      sum + (Number(item.Quantity) || 0) * (Number(item.Cost_Price) || 0),
+    0,
   );
 
   // --- Inventory Movement (Last 7 Months) ---
@@ -115,7 +140,10 @@ const DashboardPg = () => {
   };
 
   // --- Stock Level Distribution ---
-  let high = 0, medium = 0, low = 0, out = 0;
+  let high = 0,
+    medium = 0,
+    low = 0,
+    out = 0;
   stock.forEach((item) => {
     const minObj = minimumStock.find((m) => m.Prod_Id === item.Prod_Id);
     const min = minObj ? Number(minObj.Minimum) || 50 : 50;
@@ -137,27 +165,26 @@ const DashboardPg = () => {
     ],
   };
 
-  // --- Recent Orders (Mock Data) ---
-  const recentOrders = [
-    { id: "ORD001", customer: "Alice Smith", date: "2025-07-09", total: 1200, status: "Shipped" },
-    { id: "ORD002", customer: "Bob Johnson", date: "2025-07-08", total: 850, status: "Processing" },
-    { id: "ORD003", customer: "Charlie Brown", date: "2025-07-08", total: 2500, status: "Delivered" },
-    { id: "ORD004", customer: "Diana Prince", date: "2025-07-07", total: 300, status: "Pending" },
-    { id: "ORD005", customer: "Eve Adams", date: "2025-07-07", total: 1800, status: "Shipped" },
-  ];
-  const statusColor = {
-    Shipped: "success",
-    Processing: "warning",
-    Delivered: "primary",
-    Pending: "secondary",
-  };
-  const statusIcon = {
-    Shipped: <IoMdTrendingUp style={{ color: "#27ae60", fontSize: 18, verticalAlign: "middle" }} />,
-    Processing: <FaBolt style={{ color: "#f1c40f", fontSize: 16, verticalAlign: "middle" }} />,
-    Delivered: <FaBoxOpen style={{ color: "#2980f2", fontSize: 16, verticalAlign: "middle" }} />,
-    Pending: <FaExclamationTriangle style={{ color: "#e67e22", fontSize: 16, verticalAlign: "middle" }} />,
-  };
-
+  // // --- Recent Orders (Mock Data) ---
+  // const recentOrders = [
+  //   { id: "ORD001", customer: "Alice Smith", date: "2025-07-09", total: 1200, status: "Shipped" },
+  //   { id: "ORD002", customer: "Bob Johnson", date: "2025-07-08", total: 850, status: "Processing" },
+  //   { id: "ORD003", customer: "Charlie Brown", date: "2025-07-08", total: 2500, status: "Delivered" },
+  //   { id: "ORD004", customer: "Diana Prince", date: "2025-07-07", total: 300, status: "Pending" },
+  //   { id: "ORD005", customer: "Eve Adams", date: "2025-07-07", total: 1800, status: "Shipped" },
+  // ];
+  // const statusColor = {
+  //   Shipped: "success",
+  //   Processing: "warning",
+  //   Delivered: "primary",
+  //   Pending: "secondary",
+  // };
+  // const statusIcon = {
+  //   Shipped: <IoMdTrendingUp style={{ color: "#27ae60", fontSize: 18, verticalAlign: "middle" }} />,
+  //   Processing: <FaBolt style={{ color: "#f1c40f", fontSize: 16, verticalAlign: "middle" }} />,
+  //   Delivered: <FaBoxOpen style={{ color: "#2980f2", fontSize: 16, verticalAlign: "middle" }} />,
+  //   Pending: <FaExclamationTriangle style={{ color: "#e67e22", fontSize: 16, verticalAlign: "middle" }} />,
+  // };
 
   function compareInvoiceNoDesc(a, b) {
     // Try to parse as numbers, fallback to string compare
@@ -178,28 +205,31 @@ const DashboardPg = () => {
   // Group stockOut by Invoice_No, sort by Invoice_No descending, and flatten the latest N invoice groups
   function getRecentStockOutAdjustmentsByInvoice(stockOut, count = 4) {
     // Filter out records without Invoice_No
-    const withInvoice = stockOut.filter(item => item.Invoice_No);
+    const withInvoice = stockOut.filter((item) => item.Invoice_No);
     // Group by Invoice_No
     const invoiceGroups = {};
-    withInvoice.forEach(item => {
+    withInvoice.forEach((item) => {
       if (!invoiceGroups[item.Invoice_No]) {
         invoiceGroups[item.Invoice_No] = [];
       }
       invoiceGroups[item.Invoice_No].push(item);
     });
     // Get array of {invoiceNo, date, items}
-    const invoiceArr = Object.entries(invoiceGroups).map(([invoiceNo, items]) => {
-      // Use the latest Invoice_Date in the group
-      const latestDate = items
-        .map(i => i.Invoice_Date)
-        .filter(Boolean)
-        .sort((a, b) => new Date(b) - new Date(a))[0] || "";
-      return {
-        invoiceNo,
-        date: latestDate,
-        items,
-      };
-    });
+    const invoiceArr = Object.entries(invoiceGroups).map(
+      ([invoiceNo, items]) => {
+        // Use the latest Invoice_Date in the group
+        const latestDate =
+          items
+            .map((i) => i.Invoice_Date)
+            .filter(Boolean)
+            .sort((a, b) => new Date(b) - new Date(a))[0] || "";
+        return {
+          invoiceNo,
+          date: latestDate,
+          items,
+        };
+      },
+    );
     // Sort by invoiceNo descending (as per requirement)
     invoiceArr.sort((a, b) => compareInvoiceNoDesc(a.invoiceNo, b.invoiceNo));
     // Take the most recent N invoice groups
@@ -207,8 +237,8 @@ const DashboardPg = () => {
 
     // Flatten to adjustment rows
     const adjustments = [];
-    recentInvoices.forEach(group => {
-      group.items.forEach(item => {
+    recentInvoices.forEach((group) => {
+      group.items.forEach((item) => {
         adjustments.push({
           id: `ADJ-OUT-${item.Id}`,
           invoiceNo: group.invoiceNo,
@@ -229,9 +259,9 @@ const DashboardPg = () => {
 
   // If there are no Invoice_No, fallback to previous logic (show latest 4 adjustments)
   let adjustments = [];
-  const stockOutWithInvoice = stockOut.filter(item => item.Invoice_No);
+  const stockOutWithInvoice = stockOut.filter((item) => item.Invoice_No);
   if (stockOutWithInvoice.length > 0) {
-    adjustments = getRecentStockOutAdjustmentsByInvoice(stockOut, 4);
+    adjustments = getRecentStockOutAdjustmentsByInvoice(stockOut, 10);
   } else {
     adjustments = [
       ...stockIn.map((item) => ({
@@ -264,7 +294,17 @@ const DashboardPg = () => {
     {
       title: "Total Products",
       value: totalProducts.toLocaleString(),
-      icon: <MdInventory size={36} style={{ color: "#fff", background: "#2980f2", borderRadius: 8, padding: 6 }} />,
+      icon: (
+        <MdInventory
+          size={36}
+          style={{
+            color: "#fff",
+            background: "#2980f2",
+            borderRadius: 8,
+            padding: 6,
+          }}
+        />
+      ),
       color: "#2980f2",
       sub: (
         <span style={{ color: "#b3e5fc" }}>
@@ -275,7 +315,17 @@ const DashboardPg = () => {
     {
       title: "Low Stock Items",
       value: lowStockItems,
-      icon: <FaExclamationTriangle size={32} style={{ color: "#fff", background: "#f1c40f", borderRadius: 8, padding: 6 }} />,
+      icon: (
+        <FaExclamationTriangle
+          size={32}
+          style={{
+            color: "#fff",
+            background: "#f1c40f",
+            borderRadius: 8,
+            padding: 6,
+          }}
+        />
+      ),
       color: "#f1c40f",
       sub: (
         <span style={{ color: "#fffbe6" }}>
@@ -286,7 +336,17 @@ const DashboardPg = () => {
     {
       title: "Out of Stock",
       value: outOfStock,
-      icon: <FaTimesCircle size={32} style={{ color: "#fff", background: "#e74c3c", borderRadius: 8, padding: 6 }} />,
+      icon: (
+        <FaTimesCircle
+          size={32}
+          style={{
+            color: "#fff",
+            background: "#e74c3c",
+            borderRadius: 8,
+            padding: 6,
+          }}
+        />
+      ),
       color: "#e74c3c",
       sub: (
         <span style={{ color: "#ffd6d6" }}>
@@ -297,7 +357,17 @@ const DashboardPg = () => {
     {
       title: "Inventory Value",
       value: `₹${totalInventoryValue.toLocaleString()}`,
-      icon: <FaRupeeSign size={32} style={{ color: "#fff", background: "#27ae60", borderRadius: 8, padding: 6 }} />,
+      icon: (
+        <FaRupeeSign
+          size={32}
+          style={{
+            color: "#fff",
+            background: "#27ae60",
+            borderRadius: 8,
+            padding: 6,
+          }}
+        />
+      ),
       color: "#27ae60",
       sub: (
         <span style={{ color: "#b9f6ca" }}>
@@ -308,8 +378,13 @@ const DashboardPg = () => {
   ];
 
   // --- Dashboard Header Gradient ---
-  const headerGradient =
-    "linear-gradient(90deg, #2980f2 0%, #27ae60 100%)";
+  const headerGradient = "linear-gradient(90deg, #2980f2 0%, #27ae60 100%)";
+
+  const recentStockIn = [...stockIn]
+    .sort(
+      (a, b) => new Date(b.Purchase_Date || 0) - new Date(a.Purchase_Date || 0),
+    )
+    .slice(0, 10);
 
   return (
     <Container
@@ -349,7 +424,6 @@ const DashboardPg = () => {
           </h2>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-  
           <OverlayTrigger
             placement="bottom"
             overlay={<Tooltip>Quick Report</Tooltip>}
@@ -396,7 +470,11 @@ const DashboardPg = () => {
           className="d-flex justify-content-center align-items-center"
           style={{ minHeight: 300 }}
         >
-          <Spinner animation="border" variant="primary" style={{ width: 60, height: 60 }} />
+          <Spinner
+            animation="border"
+            variant="primary"
+            style={{ width: 60, height: 60 }}
+          />
         </div>
       ) : (
         <>
@@ -492,9 +570,18 @@ const DashboardPg = () => {
                 }}
               >
                 <Card.Body>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 10,
+                      marginBottom: 8,
+                    }}
+                  >
                     <FaChartLine style={{ color: "#2980f2", fontSize: 22 }} />
-                    <Card.Title style={{ fontWeight: 700, fontSize: 18, margin: 0 }}>
+                    <Card.Title
+                      style={{ fontWeight: 700, fontSize: 18, margin: 0 }}
+                    >
                       Inventory Movement (Last 7 Months)
                     </Card.Title>
                   </div>
@@ -545,9 +632,18 @@ const DashboardPg = () => {
                 }}
               >
                 <Card.Body>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 10,
+                      marginBottom: 8,
+                    }}
+                  >
                     <FaChartPie style={{ color: "#27ae60", fontSize: 22 }} />
-                    <Card.Title style={{ fontWeight: 700, fontSize: 18, margin: 0 }}>
+                    <Card.Title
+                      style={{ fontWeight: 700, fontSize: 18, margin: 0 }}
+                    >
                       Stock Level Distribution
                     </Card.Title>
                   </div>
@@ -584,25 +680,37 @@ const DashboardPg = () => {
                     }}
                   >
                     <span>
-                      <span style={{ color: "#27ae60", fontWeight: 700 }}>●</span> High Stock{" "}
+                      <span style={{ color: "#27ae60", fontWeight: 700 }}>
+                        ●
+                      </span>{" "}
+                      High Stock{" "}
                       <span style={{ color: "#27ae60" }}>
                         {Math.round((high / totalProducts) * 100) || 0}%
                       </span>
                     </span>
                     <span>
-                      <span style={{ color: "#FFA500", fontWeight: 700 }}>●</span> Low Stock{" "}
+                      <span style={{ color: "#FFA500", fontWeight: 700 }}>
+                        ●
+                      </span>{" "}
+                      Low Stock{" "}
                       <span style={{ color: "#FFA500" }}>
                         {Math.round((low / totalProducts) * 100) || 0}%
                       </span>
                     </span>
                     <span>
-                      <span style={{ color: "#f1c40f", fontWeight: 700 }}>●</span> Medium Stock{" "}
+                      <span style={{ color: "#f1c40f", fontWeight: 700 }}>
+                        ●
+                      </span>{" "}
+                      Medium Stock{" "}
                       <span style={{ color: "#f1c40f" }}>
                         {Math.round((medium / totalProducts) * 100) || 0}%
                       </span>
                     </span>
                     <span>
-                      <span style={{ color: "#e74c3c", fontWeight: 700 }}>●</span> Out of Stock{" "}
+                      <span style={{ color: "#e74c3c", fontWeight: 700 }}>
+                        ●
+                      </span>{" "}
+                      Out of Stock{" "}
                       <span style={{ color: "#e74c3c" }}>
                         {Math.round((out / totalProducts) * 100) || 0}%
                       </span>
@@ -626,13 +734,37 @@ const DashboardPg = () => {
                 }}
               >
                 <Card.Body>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-                    <FaClipboardList style={{ color: "#2980f2", fontSize: 20 }} />
-                    <Card.Title style={{ fontWeight: 700, fontSize: 18, margin: 0 }}>
-                      Recent Orders
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 10,
+                      marginBottom: 8,
+                    }}
+                  >
+                    <FaBoxOpen
+                      style={{
+                        color: "#2980f2",
+                        fontSize: 20,
+                      }}
+                    />
+                    <Card.Title
+                      style={{
+                        fontWeight: 700,
+                        fontSize: 18,
+                        margin: 0,
+                      }}
+                    >
+                      Recent Stock In
                     </Card.Title>
                   </div>
-                  <div style={{ maxHeight: 220, overflowY: "auto" }}>
+
+                  <div
+                    style={{
+                      maxHeight: 220,
+                      overflowY: "auto",
+                    }}
+                  >
                     <Table
                       size="sm"
                       hover
@@ -643,51 +775,56 @@ const DashboardPg = () => {
                         background: "#f8faff",
                       }}
                     >
-                      <thead style={{ background: "#f3f6fa" }}>
+                      <thead
+                        style={{
+                          background: "#f3f6fa",
+                        }}
+                      >
                         <tr>
-                          <th>ORDER ID</th>
-                          <th>CUSTOMER</th>
+                          <th>PO NO</th>
+                          <th>MODEL</th>
+                          <th>QTY</th>
                           <th>DATE</th>
-                          <th>TOTAL</th>
-                          <th>STATUS</th>
+                          <th>USER</th>
                         </tr>
                       </thead>
+
                       <tbody>
-                        {recentOrders.map((order) => (
-                          <tr key={order.id}>
-                            <td>
-                              <a
-                                href="#"
-                                style={{
-                                  color: "#2980f2",
-                                  textDecoration: "underline",
-                                  fontWeight: 600,
-                                }}
-                              >
-                                {order.id}
-                              </a>
+                        {recentStockIn.map((item) => (
+                          <tr key={item.Id}>
+                            <td
+                              style={{
+                                fontWeight: 600,
+                                color: "#2980f2",
+                              }}
+                            >
+                              {item.Purchase_Order}
                             </td>
-                            <td>{order.customer}</td>
-                            <td>{order.date}</td>
-                            <td>
-                              <FaRupeeSign style={{ color: "#27ae60", fontSize: 13, marginRight: 2 }} />
-                              {order.total.toLocaleString()}
-                            </td>
+
+                            <td>{item.Model_no}</td>
+
                             <td>
                               <Badge
-                                bg={statusColor[order.status] || "secondary"}
+                                bg="success"
                                 style={{
                                   fontSize: 13,
                                   padding: "6px 12px",
                                   borderRadius: 12,
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: 6,
                                 }}
                               >
-                                {statusIcon[order.status]} {order.status}
+                                +{item.Quantity}
                               </Badge>
                             </td>
+
+                            <td>
+                              {item.Purchase_Date
+                                ? new Date(
+                                    item.Purchase_Date,
+                                  ).toLocaleDateString("en-GB")
+                                : ""}
+                            </td>
+
+                            <td>{item.Created_By}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -707,10 +844,19 @@ const DashboardPg = () => {
                 }}
               >
                 <Card.Body>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-                    <FaExchangeAlt style={{ color: "#27ae60", fontSize: 20 }} />
-                    <Card.Title style={{ fontWeight: 700, fontSize: 18, margin: 0 }}>
-                      Recent Stock Adjustments
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 10,
+                      marginBottom: 8,
+                    }}
+                  >
+                    <FaBoxOpen style={{ color: "#e74c3c", fontSize: 20 }} />
+                    <Card.Title
+                      style={{ fontWeight: 700, fontSize: 18, margin: 0 }}
+                    >
+                      Recent Stock Out
                     </Card.Title>
                   </div>
                   <div style={{ maxHeight: 220, overflowY: "auto" }}>
@@ -728,12 +874,10 @@ const DashboardPg = () => {
                         <tr>
                           {/* <th>ID</th> */}
                           {/* Show Invoice No if present */}
-                          {adjustments.length > 0 && adjustments[0].invoiceNo && (
-                            <th>INVOICE</th>
-                          )}
+                          {adjustments.length > 0 &&
+                            adjustments[0].invoiceNo && <th>INVOICE</th>}
                           <th>PRODUCT</th>
-                          <th>TYPE</th>
-                          <th>QUANTITY</th>
+                          <th>QTY</th>
                           <th>DATE</th>
                           <th>USER</th>
                         </tr>
@@ -745,32 +889,22 @@ const DashboardPg = () => {
                             {/* Show Invoice No if present */}
                             <td>
                               {adj.invoiceNo
-                                ? adj.invoiceNo + (adj.challan ? " " + adj.challan : "")
+                                ? adj.invoiceNo +
+                                  (adj.challan ? " " + adj.challan : "")
                                 : adj.challan || ""}
                             </td>
                             <td>{adj.modelNo}</td>
                             <td>
                               <Badge
-                                bg={adj.type === "In" ? "info" : "danger"}
+                                bg="danger"
                                 style={{
                                   fontSize: 13,
                                   padding: "6px 12px",
                                   borderRadius: 12,
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: 6,
                                 }}
                               >
-                                {adj.type === "In" ? (
-                                  <IoMdTrendingUp style={{ color: "#2980f2", fontSize: 16 }} />
-                                ) : (
-                                  <IoMdTrendingDown style={{ color: "#e74c3c", fontSize: 16 }} />
-                                )}{" "}
-                                {adj.type}
+                                {adj.quantity}
                               </Badge>
-                            </td>
-                            <td style={{ fontWeight: 600, color: adj.type === "In" ? "#27ae60" : "#e74c3c" }}>
-                              {adj.quantity}
                             </td>
                             <td>{adj.date}</td>
                             <td>{adj.user}</td>
