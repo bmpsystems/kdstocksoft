@@ -1,11 +1,26 @@
+.topbar-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+
+  font-size: 28px;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 1px;
+
+  text-align: center;
+  white-space: nowrap;
+}
+
 .topbar {
   display: flex;
-  justify-content: right;
   align-items: center;
+justify-content: flex-end;
   padding: 12px 20px;
   background-color: #00d6ab;
   position: relative;
 }
+
 
 .account-logo {
   position: relative;
