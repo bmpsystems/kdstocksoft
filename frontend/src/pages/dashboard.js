@@ -380,11 +380,9 @@ const DashboardPg = () => {
   // --- Dashboard Header Gradient ---
   const headerGradient = "linear-gradient(90deg, #2980f2 0%, #27ae60 100%)";
 
-  const recentStockIn = [...stockIn]
-    .sort(
-      (a, b) => new Date(b.Purchase_Date || 0) - new Date(a.Purchase_Date || 0),
-    )
-    .slice(0, 10);
+const recentStockIn = [...stockIn]
+  .sort((a, b) => Number(b.Id) - Number(a.Id))
+  .slice(0, 10);
 
   return (
     <Container
