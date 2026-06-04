@@ -1754,7 +1754,7 @@ ORDER BY so.Invoice_No DESC, so.Delivery_Challan DESC;
 });
 
 //Stock Out List
-app.get('/stock-out', async (req, res) => {
+app.get("/stock-out", async (req, res) => {
   try {
     const [rows] = await pool.execute(`
 SELECT 
@@ -1810,8 +1810,8 @@ ORDER BY pod.Invoice_No DESC, pod.Delivery_Challan DESC;
       const d = new Date(date);
       if (isNaN(d.getTime())) return null;
       const year = d.getFullYear();
-      const month = String(d.getMonth() + 1).padStart(2, '0');
-      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
       return `${year}-${month}-${day}`;
     }
 
@@ -1839,7 +1839,7 @@ ORDER BY pod.Invoice_No DESC, pod.Delivery_Challan DESC;
           Total_Quantity: 0,
           Total_Price: 0,
           prod_details: [],
-          Make: '',
+          Make: "",
         };
       }
 
@@ -1866,23 +1866,28 @@ ORDER BY pod.Invoice_No DESC, pod.Delivery_Challan DESC;
     // Format Total_Price to 2 decimal places
     for (const groupKey in grouped) {
       const makes = grouped[groupKey].prod_details
-        .map(p => p.Make)
+        .map((p) => p.Make)
         .filter((v, i, a) => v && a.indexOf(v) === i);
-      grouped[groupKey].Make = makes.join(', ');
+      grouped[groupKey].Make = makes.join(", ");
       // Ensure Total_Price is rounded to 2 decimal places
-      grouped[groupKey].Total_Price = Number(grouped[groupKey].Total_Price).toFixed(2);
+      grouped[groupKey].Total_Price = Number(
+        grouped[groupKey].Total_Price,
+      ).toFixed(2);
     }
 
     const formatted = Object.values(grouped);
 
     res.json(formatted);
   } catch (err) {
-    res.status(500).json({ error: 'Error fetching stock-out records', details: err.message });
+    res.status(500).json({
+      error: "Error fetching stock-out records",
+      details: err.message,
+    });
   }
 });
 
 //Create stock out
-app.post('/stock-out/create', async (req, res) => {
+app.post("/stock-out/create", async (req, res) => {
   let {
     Invoice_No,
     Invoice_Date,
@@ -1896,12 +1901,12 @@ app.post('/stock-out/create', async (req, res) => {
     Created_By,
     Created_On,
     Active,
-    prod_details
+    prod_details,
   } = req.body;
 
   // Convert empty string to null
-  if (Invoice_No === '') Invoice_No = null;
-  if (Delivery_Challan === '') Delivery_Challan = null;
+  if (Invoice_No === "") Invoice_No = null;
+  if (Delivery_Challan === "") Delivery_Challan = null;
 
   const conn = await pool.getConnection();
 
@@ -1910,12 +1915,12 @@ app.post('/stock-out/create', async (req, res) => {
     for (const detail of prod_details) {
       const [stockRows] = await conn.execute(
         `SELECT Quantity FROM stock WHERE Prod_Id = ?`,
-        [detail.Prod_Id]
+        [detail.Prod_Id],
       );
 
       if (stockRows.length === 0) {
         return res.status(400).json({
-          error: `Product ID ${detail.Prod_Id} not found in stock`
+          error: `Product ID ${detail.Prod_Id} not found in stock`,
         });
       }
 
@@ -1923,7 +1928,7 @@ app.post('/stock-out/create', async (req, res) => {
       if (availableQty < detail.Quantity) {
         return res.status(400).json({
           error: `Insufficient stock for product ID ${detail.Prod_Id}`,
-          message: "Please check products quantity"
+          message: "Please check products quantity",
         });
       }
     }
@@ -1933,12 +1938,13 @@ app.post('/stock-out/create', async (req, res) => {
       const [duplicateInvoiceCheck] = await conn.execute(
         `SELECT Id FROM stock_out
          WHERE Invoice_No = ? AND Invoice_Date = ? AND Comp_Id = ?`,
-        [Invoice_No, Invoice_Date, Comp_Id]
+        [Invoice_No, Invoice_Date, Comp_Id],
       );
 
       if (duplicateInvoiceCheck.length > 0) {
         return res.status(400).json({
-          error: 'Stock-out entry already exists for this Invoice, Date and Company.'
+          error:
+            "Stock-out entry already exists for this Invoice, Date and Company.",
         });
       }
     }
@@ -1948,12 +1954,13 @@ app.post('/stock-out/create', async (req, res) => {
       const [duplicateChallanCheck] = await conn.execute(
         `SELECT Id FROM stock_out
          WHERE Invoice_Date = ? AND Delivery_Challan = ? AND Purpose = ? AND Comp_Id = ?`,
-        [Invoice_Date, Delivery_Challan, Purpose, Comp_Id]
+        [Invoice_Date, Delivery_Challan, Purpose, Comp_Id],
       );
 
       if (duplicateChallanCheck.length > 0) {
         return res.status(400).json({
-          error: 'Stock-out entry already exists for this Date, Challan, Purpose, and Company.'
+          error:
+            "Stock-out entry already exists for this Date, Challan, Purpose, and Company.",
         });
       }
     }
@@ -1977,8 +1984,8 @@ app.post('/stock-out/create', async (req, res) => {
         Delivery_By,
         Created_By,
         Created_On,
-        Active ? 1 : 0
-      ]
+        Active ? 1 : 0,
+      ],
     );
 
     const stockOutId = stockOutResult.insertId;
@@ -1995,27 +2002,30 @@ app.post('/stock-out/create', async (req, res) => {
           detail.Prod_Id,
           detail.Quantity,
           detail.Remarks,
-        ]
+        ],
       );
 
       const [stockRows] = await conn.execute(
         `SELECT Id, Quantity FROM stock WHERE Prod_Id = ? FOR UPDATE`,
-        [detail.Prod_Id]
+        [detail.Prod_Id],
       );
 
       const updatedQty = stockRows[0].Quantity - detail.Quantity;
 
-      await conn.execute(
-        `UPDATE stock SET Quantity = ? WHERE Id = ?`,
-        [updatedQty, stockRows[0].Id]
-      );
+      await conn.execute(`UPDATE stock SET Quantity = ? WHERE Id = ?`, [
+        updatedQty,
+        stockRows[0].Id,
+      ]);
     }
 
     await conn.commit();
+    const lowStockItems = await checkLowStockAndNotify(conn, prod_details);
     conn.release();
 
     res.status(201).json({
-      message: 'Stock-out created successfully and stock updated',
+      success: true,
+      message: "Stock-out created successfully and stock updated",
+      lowStockItems,
       stock_out_id: stockOutId,
       data: {
         Invoice_No,
@@ -2030,30 +2040,29 @@ app.post('/stock-out/create', async (req, res) => {
         Created_By,
         Created_On,
         Active: Active ? 1 : 0,
-        prod_details
-      }
+        prod_details,
+      },
     });
-
   } catch (err) {
     await conn.rollback();
     conn.release();
 
-    if (err.code === 'ER_DUP_ENTRY') {
+    if (err.code === "ER_DUP_ENTRY") {
       return res.status(400).json({
-        error: 'Duplicate entry',
-        details: 'Invoice number or challan might be duplicated in DB'
+        error: "Duplicate entry",
+        details: "Invoice number or challan might be duplicated in DB",
       });
     }
 
     res.status(500).json({
-      error: 'Error creating stock-out record',
-      details: err.message
+      error: "Error creating stock-out record",
+      details: err.message,
     });
   }
 });
 
 //Update Stock Out
-app.put('/stock-out/:id', async (req, res) => {
+app.put("/stock-out/:id", async (req, res) => {
   const { id } = req.params;
   let {
     Comp_Id,
@@ -2068,7 +2077,7 @@ app.put('/stock-out/:id', async (req, res) => {
     Active,
     Modified_By,
     Modified_On,
-    prod_details
+    prod_details,
   } = req.body;
 
   // Helper: convert undefined to null for all fields
@@ -2085,7 +2094,7 @@ app.put('/stock-out/:id', async (req, res) => {
   Packing_By = safe(Packing_By);
   Checking_By = safe(Checking_By);
   Delivery_By = safe(Delivery_By);
-  Active = typeof Active === "undefined" ? null : (Active ? 1 : 0);
+  Active = typeof Active === "undefined" ? null : Active ? 1 : 0;
   Modified_By = safe(Modified_By);
   Modified_On = safe(Modified_On);
   prod_details = Array.isArray(prod_details) ? prod_details : [];
@@ -2098,7 +2107,7 @@ app.put('/stock-out/:id', async (req, res) => {
     // Step 1: Get existing Invoice_No and Delivery_Challan
     const [existing] = await conn.execute(
       `SELECT Invoice_No, Delivery_Challan FROM stock_out WHERE Id = ?`,
-      [id]
+      [id],
     );
 
     if (existing.length === 0) {
@@ -2113,22 +2122,22 @@ app.put('/stock-out/:id', async (req, res) => {
     // Fetch all product_sold_details for this Invoice_No or Delivery_Challan
     const [oldDetails] = await conn.execute(
       `SELECT Prod_Id, Quantity FROM product_sold_details WHERE (Invoice_No = ? OR Delivery_Challan = ?)`,
-      [oldInvoiceNo, oldDeliveryChallan]
+      [oldInvoiceNo, oldDeliveryChallan],
     );
 
     for (const old of oldDetails) {
       const [stockRows] = await conn.execute(
         `SELECT Id, Quantity FROM stock WHERE Prod_Id = ? FOR UPDATE`,
-        [old.Prod_Id]
+        [old.Prod_Id],
       );
 
       if (stockRows.length > 0) {
         const restoredQty = stockRows[0].Quantity + old.Quantity;
 
-        await conn.execute(
-          `UPDATE stock SET Quantity = ? WHERE Id = ?`,
-          [restoredQty, stockRows[0].Id]
-        );
+        await conn.execute(`UPDATE stock SET Quantity = ? WHERE Id = ?`, [
+          restoredQty,
+          stockRows[0].Id,
+        ]);
       }
     }
 
@@ -2137,20 +2146,20 @@ app.put('/stock-out/:id', async (req, res) => {
       // Defensive: convert undefined to null for Prod_Id and Quantity
       const prodId = safe(detail.Prod_Id);
       const qty = safe(detail.Quantity);
-      // 
+      //
 
       if (prodId === null || qty === null) {
         await conn.rollback();
         conn.release();
         return res.status(400).json({
           error: "Invalid product details",
-          details: "Product ID and Quantity are required for each product"
+          details: "Product ID and Quantity are required for each product",
         });
       }
 
       const [stockRows] = await conn.execute(
         `SELECT Quantity FROM stock WHERE Prod_Id = ? FOR UPDATE`,
-        [prodId]
+        [prodId],
       );
 
       if (stockRows.length === 0) {
@@ -2158,7 +2167,7 @@ app.put('/stock-out/:id', async (req, res) => {
         conn.release();
         return res.status(400).json({
           error: "Invalid product",
-          details: `Product ID ${prodId} not found in stock`
+          details: `Product ID ${prodId} not found in stock`,
         });
       }
 
@@ -2170,7 +2179,7 @@ app.put('/stock-out/:id', async (req, res) => {
         conn.release();
         return res.status(400).json({
           error: "Please check product quantities",
-          details: `Insufficient stock for product ID ${prodId}`
+          details: `Insufficient stock for product ID ${prodId}`,
         });
       }
     }
@@ -2178,7 +2187,7 @@ app.put('/stock-out/:id', async (req, res) => {
     // Step 4: Delete old product_sold_details for this Invoice_No or Delivery_Challan
     await conn.execute(
       `DELETE FROM product_sold_details WHERE (Invoice_No = ? OR Delivery_Challan = ?)`,
-      [oldInvoiceNo, oldDeliveryChallan]
+      [oldInvoiceNo, oldDeliveryChallan],
     );
 
     // Step 5: Update stock_out table
@@ -2199,8 +2208,8 @@ app.put('/stock-out/:id', async (req, res) => {
         Active,
         Modified_By,
         Modified_On,
-        id
-      ]
+        id,
+      ],
     );
 
     // Step 6: Insert new product_sold_details and update stock
@@ -2212,30 +2221,39 @@ app.put('/stock-out/:id', async (req, res) => {
       await conn.execute(
         `INSERT INTO product_sold_details (Invoice_No, Delivery_Challan, Prod_Id, Quantity, Remarks)
          VALUES (?, ?, ?, ?, ?)`,
-        [Invoice_No, Delivery_Challan, prodId, qty, remarks]
+        [Invoice_No, Delivery_Challan, prodId, qty, remarks],
       );
 
       const [stockRows] = await conn.execute(
         `SELECT Id, Quantity FROM stock WHERE Prod_Id = ? FOR UPDATE`,
-        [prodId]
+        [prodId],
       );
 
       const existingQty = stockRows[0].Quantity;
       const updatedQty = existingQty - qty;
 
-      await conn.execute(
-        `UPDATE stock SET Quantity = ? WHERE Id = ?`,
-        [updatedQty, stockRows[0].Id]
-      );
+      await conn.execute(`UPDATE stock SET Quantity = ? WHERE Id = ?`, [
+        updatedQty,
+        stockRows[0].Id,
+      ]);
     }
 
     await conn.commit();
+    const lowStockItems = await checkLowStockAndNotify(conn, prod_details);
     conn.release();
 
-    res.status(200).json({ message: "Stock-out updated successfully." });
+    res.status(200).json({
+      success: true,
+      message: "Stock-out updated successfully.",
+      lowStockItems,
+    });
   } catch (err) {
-    try { await conn.rollback(); } catch (e) {}
-    try { conn.release(); } catch (e) {}
+    try {
+      await conn.rollback();
+    } catch (e) {}
+    try {
+      conn.release();
+    } catch (e) {}
     // If the error is about undefined bind parameters, give a more helpful message
     if (
       err &&
@@ -2244,18 +2262,19 @@ app.put('/stock-out/:id', async (req, res) => {
     ) {
       return res.status(500).json({
         error: "Error updating stock-out record",
-        details: "Bind parameters must not contain undefined. To pass SQL NULL specify JS null"
+        details:
+          "Bind parameters must not contain undefined. To pass SQL NULL specify JS null",
       });
     }
     res.status(500).json({
       error: "Error updating stock-out record",
-      details: err.message
+      details: err.message,
     });
   }
 });
 
 // TOGGLE Active State for Stock Out
-app.post('/stock-out/toggle', async (req, res) => {
+app.post("/stock-out/toggle", async (req, res) => {
   const { id } = req.body;
   const conn = await pool.getConnection();
 
@@ -2265,7 +2284,7 @@ app.post('/stock-out/toggle', async (req, res) => {
     // 1. Get current Active status, Invoice_No, and Delivery_Challan
     const [stockOutRows] = await conn.execute(
       `SELECT Active, Invoice_No, Delivery_Challan FROM stock_out WHERE Id = ?`,
-      [id]
+      [id],
     );
 
     if (stockOutRows.length === 0) {
@@ -2280,13 +2299,13 @@ app.post('/stock-out/toggle', async (req, res) => {
     // 2. Get product_sold_details for this stock_out (by Invoice_No or Delivery_Challan)
     const [productDetails] = await conn.execute(
       `SELECT Prod_Id, Quantity FROM product_sold_details WHERE (Invoice_No = ? OR Delivery_Challan = ?)`,
-      [invoiceNo, deliveryChallan]
+      [invoiceNo, deliveryChallan],
     );
 
     for (const item of productDetails) {
       const [stockRows] = await conn.execute(
         `SELECT Id, Quantity FROM stock WHERE Prod_Id = ? FOR UPDATE`,
-        [item.Prod_Id]
+        [item.Prod_Id],
       );
 
       if (stockRows.length === 0) {
@@ -2299,31 +2318,37 @@ app.post('/stock-out/toggle', async (req, res) => {
       if (isDeactivating) {
         // Restore stock
         const updatedQty = currentQty + item.Quantity;
-        await conn.execute(
-          `UPDATE stock SET Quantity = ? WHERE Id = ?`,
-          [updatedQty, stockId]
-        );
+        await conn.execute(`UPDATE stock SET Quantity = ? WHERE Id = ?`, [
+          updatedQty,
+          stockId,
+        ]);
       } else {
         // Subtract stock again only if enough stock available
         if (currentQty < item.Quantity) {
           throw new Error(`Insufficient stock for product ID ${item.Prod_Id}`);
         }
         const updatedQty = currentQty - item.Quantity;
-        await conn.execute(
-          `UPDATE stock SET Quantity = ? WHERE Id = ?`,
-          [updatedQty, stockId]
-        );
+        await conn.execute(`UPDATE stock SET Quantity = ? WHERE Id = ?`, [
+          updatedQty,
+          stockId,
+        ]);
       }
     }
 
     // 3. Toggle active status
     await conn.execute(
       `UPDATE stock_out SET Active = NOT Active WHERE Id = ?`,
-      [id]
+      [id],
     );
 
     await conn.commit();
-
+    const lowStockItems = await checkLowStockAndNotify(
+      conn,
+      productDetails.map((item) => ({
+        Prod_Id: item.Prod_Id,
+        Quantity: item.Quantity,
+      })),
+    );
     // 4. Fetch updated data for this stock_out entry and its details (like /stock-out)
     const [rows] = await conn.execute(
       `
@@ -2373,11 +2398,15 @@ app.post('/stock-out/toggle', async (req, res) => {
       WHERE so.Id = ?
       ORDER BY pod.Invoice_No DESC, pod.Delivery_Challan DESC
       `,
-      [id]
+      [id],
     );
 
     if (rows.length === 0) {
-      return res.status(404).json({ error: "Stock-out entry not found" });
+      conn.release();
+
+      return res.status(404).json({
+        error: "Stock-out entry not found",
+      });
     }
 
     // Grouping logic as in /stock-out
@@ -2389,8 +2418,8 @@ app.post('/stock-out/toggle', async (req, res) => {
       const d = new Date(date);
       if (isNaN(d.getTime())) return null;
       const year = d.getFullYear();
-      const month = String(d.getMonth() + 1).padStart(2, '0');
-      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
       return `${year}-${month}-${day}`;
     }
 
@@ -2415,7 +2444,7 @@ app.post('/stock-out/toggle', async (req, res) => {
           Total_Quantity: 0,
           Total_Price: 0,
           prod_details: [],
-          Make: '',
+          Make: "",
         };
       }
       grouped[groupKey].prod_details.push({
@@ -2438,19 +2467,25 @@ app.post('/stock-out/toggle', async (req, res) => {
     }
     // Compose Make string
     const makes = grouped[groupKey].prod_details
-      .map(p => p.Make)
+      .map((p) => p.Make)
       .filter((v, i, a) => v && a.indexOf(v) === i);
-    grouped[groupKey].Make = makes.join(', ');
-    grouped[groupKey].Total_Price = Number(grouped[groupKey].Total_Price).toFixed(2);
+    grouped[groupKey].Make = makes.join(", ");
+    grouped[groupKey].Total_Price = Number(
+      grouped[groupKey].Total_Price,
+    ).toFixed(2);
     const formatted = grouped[groupKey];
 
     conn.release();
-    res.json(formatted);
-
+    res.json({
+      ...formatted,
+      lowStockItems,
+    });
   } catch (err) {
     await conn.rollback();
     conn.release();
-    res.status(500).json({ error: 'Error toggling active state', details: err.message });
+    res
+      .status(500)
+      .json({ error: "Error toggling active state", details: err.message });
   }
 });
 
