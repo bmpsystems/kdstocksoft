@@ -369,7 +369,7 @@ function Login() {
       </div>
 
       <div className="left-panel">
-        <h1 style={{ color: '#00d6ab' }}><center>Client-Stock Management Software</center></h1>
+        <h1 style={{ color: '#00d6ab' }}><center>KD Stock Management Software</center></h1>
         <h2>
           {isSignUp
             ? 'Sign Up'
