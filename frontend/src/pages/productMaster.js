@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState, useRef } from "react";
+import axios from "axios";
 import {
   Container,
   Row,
@@ -11,29 +11,42 @@ import {
   InputGroup,
   FormControl,
   Spinner,
-} from 'react-bootstrap';
+} from "react-bootstrap";
 
-const PRODUCT_CATEGORY_API = 'https://kdstocksoft.onrender.com/product-category-helper'; // <-- Use this for product category
+const PRODUCT_CATEGORY_API = "https://kdstocksoft.onrender.com/product-category-helper"; // <-- Use this for product category
 
 const ProductMaster = () => {
   const [products, setProducts] = useState([]);
   const [filtered, setFiltered] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const hasFetchedOnce = useRef(false);
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState("");
   const [showModal, setShowModal] = useState(false);
 
   // dropdownOptions always an object with makes, warehouses, and units arrays (default to empty arrays)
-  const [dropdownOptions, setDropdownOptions] = useState({ makes: [], warehouses: [], units: [] });
+  const [dropdownOptions, setDropdownOptions] = useState({
+    makes: [],
+    warehouses: [],
+    units: [],
+  });
   const [productCategories, setProductCategories] = useState([]); // For Add modal
   const [editProductCategories, setEditProductCategories] = useState([]); // For Edit modal
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState("");
   // Add HSNCode to newProduct state
-  const [newProduct, setNewProduct] = useState({ name: '', model: '', listprice: '', costprice: '', makeId: '', pCatId: '', whouseId: '', unitId: '', HSNCode: '' });
+  const [newProduct, setNewProduct] = useState({
+    name: "",
+    model: "",
+    costprice: "",
+    makeId: "",
+    pCatId: "",
+    whouseId: "",
+    unitId: "",
+    HSNCode: "",
+  });
   const [activeStates, setActiveStates] = useState({}); // for toggle
   // Add HSNCode to editProduct state
-  const [editProduct, setEditProduct] = useState(null);   // stores product being edited
+  const [editProduct, setEditProduct] = useState(null); // stores product being edited
   const [showEditModal, setShowEditModal] = useState(false); // controls if modal is visible
   const [makeOptions, setMakeOptions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -42,56 +55,59 @@ const ProductMaster = () => {
     "Model No",
     "Make",
     "Cost Price",
-    "List Price",
     "Edit",
-    "Active"
+    "Active",
   ];
 
   const rowsPerPage = 10;
-  const API_URL = 'https://kdstocksoft.onrender.com/products';
+  const API_URL = "https://kdstocksoft.onrender.com/products";
 
   useEffect(() => {
-    const storedUsername = localStorage.getItem('name');
+    const storedUsername = localStorage.getItem("name");
     if (storedUsername) setUsername(storedUsername);
   }, []);
 
   // Fetch product categories for Add modal when makeId changes
   useEffect(() => {
     if (newProduct.makeId) {
-      axios.post(PRODUCT_CATEGORY_API, { make_Id: newProduct.makeId })
-        .then(res => {
+      axios
+        .post(PRODUCT_CATEGORY_API, { make_Id: newProduct.makeId })
+        .then((res) => {
           setProductCategories(Array.isArray(res.data) ? res.data : []);
         })
         .catch(() => setProductCategories([]));
     } else {
       setProductCategories([]);
     }
-    setNewProduct(prev => ({ ...prev, pCatId: '' }));
+    setNewProduct((prev) => ({ ...prev, pCatId: "" }));
     // eslint-disable-next-line
   }, [newProduct.makeId]);
 
   // --- FIX: Product Category value not setting in Edit Modal ---
   useEffect(() => {
     if (showEditModal && editProduct?.makeId) {
-      axios.post(PRODUCT_CATEGORY_API, { make_Id: editProduct.makeId })
-        .then(res => {
+      axios
+        .post(PRODUCT_CATEGORY_API, { make_Id: editProduct.makeId })
+        .then((res) => {
           const categories = Array.isArray(res.data) ? res.data : [];
           setEditProductCategories(categories);
 
           if (editProduct?.pCatId) {
-            const found = categories.some(cat => String(cat.Id) === String(editProduct.pCatId));
+            const found = categories.some(
+              (cat) => String(cat.Id) === String(editProduct.pCatId),
+            );
             if (!found) {
-              setEditProduct(prev => prev ? { ...prev, pCatId: '' } : prev);
+              setEditProduct((prev) => (prev ? { ...prev, pCatId: "" } : prev));
             }
           }
         })
         .catch(() => {
           setEditProductCategories([]);
-          setEditProduct(prev => prev ? { ...prev, pCatId: '' } : prev);
+          setEditProduct((prev) => (prev ? { ...prev, pCatId: "" } : prev));
         });
     } else if (showEditModal) {
       setEditProductCategories([]);
-      setEditProduct(prev => prev ? { ...prev, pCatId: '' } : prev);
+      setEditProduct((prev) => (prev ? { ...prev, pCatId: "" } : prev));
     }
     // eslint-disable-next-line
   }, [editProduct?.makeId, showEditModal]);
@@ -100,13 +116,15 @@ const ProductMaster = () => {
   const openEditModal = (product) => {
     if (product.Active === 1) {
       Promise.all([
-        axios.get('https://kdstocksoft.onrender.com/make-helper'),
-        axios.get('https://kdstocksoft.onrender.com/warehouse'),
-        axios.get('https://kdstocksoft.onrender.com/unit'),
+        axios.get("https://kdstocksoft.onrender.com/make-helper"),
+        axios.get("https://kdstocksoft.onrender.com/warehouse"),
+        axios.get("https://kdstocksoft.onrender.com/unit"),
       ])
         .then(([makeRes, warehouseRes, unitRes]) => {
           const makes = Array.isArray(makeRes.data) ? makeRes.data : [];
-          const warehouses = Array.isArray(warehouseRes.data) ? warehouseRes.data : [];
+          const warehouses = Array.isArray(warehouseRes.data)
+            ? warehouseRes.data
+            : [];
           const units = Array.isArray(unitRes.data) ? unitRes.data : [];
           setDropdownOptions({
             makes,
@@ -114,45 +132,70 @@ const ProductMaster = () => {
             units,
           });
 
-          const selectedMake = makes.find(m => m.Id === product.Make_Id);
-          const selectedWarehouse = warehouses.find(w => w.Id === product.Whouse_Id);
-          const selectedUnit = units.find(u => u.Id === product.Unit_Id);
+          const selectedMake = makes.find((m) => m.Id === product.Make_Id);
+          const selectedWarehouse = warehouses.find(
+            (w) => w.Id === product.Whouse_Id,
+          );
+          const selectedUnit = units.find((u) => u.Id === product.Unit_Id);
 
           setEditProduct({
             id: product.Id,
             name: product.Product_name,
             model: product.Model_no,
             costprice: product.Cost_price,
-            listprice: product.List_price,
-            makeId: product.Make_Id?.toString() || '',
-            pCatId: (product.PCat_Id !== null && product.PCat_Id !== undefined) ? product.PCat_Id.toString() : '',
-            whouseId: product.Whouse_Id?.toString() || '',
-            unitId: product.Unit_Id?.toString() || '',
-            make: selectedMake?.Make || '',
-            warehouse: selectedWarehouse?.Name || '',
-            unit: selectedUnit?.Name || '',
-            HSNCode: product.HSNCode || '', // Add HSNCode to editProduct
+            // listprice: product.List_price,
+            makeId: product.Make_Id?.toString() || "",
+            pCatId:
+              product.PCat_Id !== null && product.PCat_Id !== undefined
+                ? product.PCat_Id.toString()
+                : "",
+            whouseId: product.Whouse_Id?.toString() || "",
+            unitId: product.Unit_Id?.toString() || "",
+            make: selectedMake?.Make || "",
+            warehouse: selectedWarehouse?.Name || "",
+            unit: selectedUnit?.Name || "",
+            HSNCode: product.HSNCode || "", // Add HSNCode to editProduct
           });
 
           setShowEditModal(true);
         })
         .catch((err) => {
-          console.error("❌ Failed to fetch make, warehouse, or unit options:", err.message);
+          console.error(
+            "❌ Failed to fetch make, warehouse, or unit options:",
+            err.message,
+          );
           alert("🚫 Could not load makes, warehouses, or units");
         });
-    }
-    else {
+    } else {
       alert("❌ Inactive records cannot be edited");
     }
   };
 
   const handleAddClick = () => {
-    setNewProduct({ name: '', model: '', listprice: '', costprice: '', makeId: '', pCatId: '', whouseId: '', unitId: '', HSNCode: '' });
+    setNewProduct({
+      name: "",
+      model: "",
+      costprice: "",
+      makeId: "",
+      pCatId: "",
+      whouseId: "",
+      unitId: "",
+      HSNCode: "",
+    });
     setShowModal(true);
   };
 
   const handleClose = () => {
-    setNewProduct({ name: '', model: '', listprice: '', costprice: '', makeId: '', pCatId: '', whouseId: '', unitId: '', HSNCode: '' });
+    setNewProduct({
+      name: "",
+      model: "",
+      costprice: "",
+      makeId: "",
+      pCatId: "",
+      whouseId: "",
+      unitId: "",
+      HSNCode: "",
+    });
     setShowModal(false);
   };
 
@@ -165,34 +208,36 @@ const ProductMaster = () => {
 
   const fetchProducts = () => {
     setLoading(true);
-    axios.get(API_URL)
+    axios
+      .get(API_URL)
       .then((response) => {
         setProducts(response.data);
         setFiltered(response.data);
 
         const actives = {};
-        response.data.forEach(item => {
+        response.data.forEach((item) => {
           actives[item.Id] = item.Active === 1;
         });
 
         setActiveStates(actives);
       })
       .catch((error) => {
-        console.error('❌ Error fetching data:', error);
+        console.error("❌ Error fetching data:", error);
       })
       .finally(() => setLoading(false));
   };
 
   useEffect(() => {
     const lowerTerm = searchTerm.toLowerCase();
-    const results = products.filter((product) =>
-      product.Id.toString().includes(lowerTerm) ||
-      product.Product_name?.toLowerCase().includes(lowerTerm) ||
-      product.Model_no?.toLowerCase().includes(lowerTerm) ||
-      product.Make?.toLowerCase().includes(lowerTerm) ||
-      product.Cost_price?.toString().includes(lowerTerm) ||
-      product.List_price?.toString().includes(lowerTerm) ||
-      product.Active?.toString().includes(lowerTerm)
+    const results = products.filter(
+      (product) =>
+        product.Id.toString().includes(lowerTerm) ||
+        product.Product_name?.toLowerCase().includes(lowerTerm) ||
+        product.Model_no?.toLowerCase().includes(lowerTerm) ||
+        product.Make?.toLowerCase().includes(lowerTerm) ||
+        product.Cost_price?.toString().includes(lowerTerm) ||
+        product.List_price?.toString().includes(lowerTerm) ||
+        product.Active?.toString().includes(lowerTerm),
     );
     setFiltered(results);
     setCurrentPage(1);
@@ -202,7 +247,7 @@ const ProductMaster = () => {
   const sortedFiltered = [...filtered].sort((a, b) => b.Id - a.Id);
   const currentData = sortedFiltered.slice(
     (currentPage - 1) * rowsPerPage,
-    currentPage * rowsPerPage
+    currentPage * rowsPerPage,
   );
 
   const handleInputChange = (e) => {
@@ -227,9 +272,15 @@ const ProductMaster = () => {
     const makes = dropdownOptions.makes || [];
     const warehouses = dropdownOptions.warehouses || [];
     const units = dropdownOptions.units || [];
-    const selectedMake = makes.find(opt => opt.Id === parseInt(newProduct.makeId));
-    const selectedWarehouse = warehouses.find(opt => opt.Id === parseInt(newProduct.whouseId));
-    const selectedUnit = units.find(opt => opt.Id === parseInt(newProduct.unitId));
+    const selectedMake = makes.find(
+      (opt) => opt.Id === parseInt(newProduct.makeId),
+    );
+    const selectedWarehouse = warehouses.find(
+      (opt) => opt.Id === parseInt(newProduct.whouseId),
+    );
+    const selectedUnit = units.find(
+      (opt) => opt.Id === parseInt(newProduct.unitId),
+    );
 
     // If pCatId is not selected or empty string or only whitespace, send 0 (not null)
     let PCatIdValue = 0;
@@ -237,11 +288,17 @@ const ProductMaster = () => {
       PCatIdValue = newProduct.pCatId;
     }
 
+    // Validate Product Category only when category list exists
+    if (productCategories.length > 0 && !newProduct.pCatId) {
+      alert("Please select a Product Category");
+      return;
+    }
+
     const productToSend = {
       Product_name: newProduct.name,
       Model_no: newProduct.model,
       Cost_price: newProduct.costprice,
-      List_price: newProduct.listprice,
+      // List_price: newProduct.listprice,
       Make_Id: newProduct.makeId,
       PCat_Id: PCatIdValue,
       Whouse_Id: newProduct.whouseId,
@@ -251,17 +308,30 @@ const ProductMaster = () => {
       Active: 1,
     };
 
-    axios.post(`${API_URL}/create`, productToSend)
+    axios
+      .post(`${API_URL}/create`, productToSend)
       .then(() => {
         fetchProducts();
-        setNewProduct({ name: '', model: '', listprice: '', costprice: '', makeId: '', pCatId: '', whouseId: '', unitId: '', HSNCode: '' });
+        setNewProduct({
+          name: "",
+          model: "",
+          costprice: "",
+          makeId: "",
+          pCatId: "",
+          whouseId: "",
+          unitId: "",
+          HSNCode: "",
+        });
         setShowModal(false);
         setTimeout(() => {
           alert("✅ Product Added Successfully !!");
         }, 300);
       })
       .catch((err) => {
-        console.error("❌ Error adding product:", err.response?.data || err.message);
+        console.error(
+          "❌ Error adding product:",
+          err.response?.data || err.message,
+        );
         alert("🚫 Failed to add product.");
       });
   };
@@ -273,11 +343,11 @@ const ProductMaster = () => {
         const updatedProduct = res.data;
 
         setProducts((prev) =>
-          prev.map((p) => (p.Id === id ? updatedProduct : p))
+          prev.map((p) => (p.Id === id ? updatedProduct : p)),
         );
 
         setFiltered((prev) =>
-          prev.map((p) => (p.Id === id ? updatedProduct : p))
+          prev.map((p) => (p.Id === id ? updatedProduct : p)),
         );
 
         setActiveStates((prev) => ({
@@ -286,8 +356,8 @@ const ProductMaster = () => {
         }));
       })
       .catch((error) => {
-        console.error('Toggle active failed:', error);
-        alert('Failed to toggle product status.');
+        console.error("Toggle active failed:", error);
+        alert("Failed to toggle product status.");
       });
   };
 
@@ -297,15 +367,15 @@ const ProductMaster = () => {
     const warehouses = dropdownOptions.warehouses || [];
     const units = dropdownOptions.units || [];
     const selectedMake = makes.find(
-      (make) => make.Id === parseInt(editProduct.makeId)
+      (make) => make.Id === parseInt(editProduct.makeId),
     );
 
     const selectedWh = warehouses.find(
-      (whouse) => whouse.Id === parseInt(editProduct.whouseId)
+      (whouse) => whouse.Id === parseInt(editProduct.whouseId),
     );
 
     const selectedUnit = units.find(
-      (unit) => unit.Id === parseInt(editProduct.unitId)
+      (unit) => unit.Id === parseInt(editProduct.unitId),
     );
 
     // If pCatId is not selected or empty string or only whitespace, send 0 (not null)
@@ -314,27 +384,33 @@ const ProductMaster = () => {
       PCatIdValue = editProduct.pCatId;
     }
 
+    // Validate Product Category only when category list exists
+    if (editProductCategories.length > 0 && !editProduct.pCatId) {
+      alert("Please select a Product Category");
+      return;
+    }
+
     const productToUpdate = {
       Product_name: editProduct.name,
       Model_no: editProduct.model,
       Cost_price: editProduct.costprice,
-      List_price: editProduct.listprice,
+      // List_price: editProduct.listprice,
       Make_Id: editProduct.makeId,
       PCat_Id: PCatIdValue,
       Whouse_Id: editProduct.whouseId,
       Unit_Id: editProduct.unitId,
       HSNCode: editProduct.HSNCode, // Add HSNCode to update payload
       Modified_By: username,
-      Make: selectedMake?.Make || '',
-      Warehouse: selectedWh?.Name || '',
-      Unit: selectedUnit?.Name || '',
+      Make: selectedMake?.Make || "",
+      Warehouse: selectedWh?.Name || "",
+      Unit: selectedUnit?.Name || "",
     };
 
     axios
       .put(`${API_URL}/${editProduct.id}`, productToUpdate)
       .then((response) => {
         const updated = products.map((p) =>
-          p.Id === editProduct.id ? response.data : p
+          p.Id === editProduct.id ? response.data : p,
         );
         fetchProducts();
         setProducts(updated);
@@ -346,8 +422,8 @@ const ProductMaster = () => {
         }, 300);
       })
       .catch((err) => {
-        console.error('❌ Update error:', err.response?.data || err.message);
-        alert('🚫 Failed to update product');
+        console.error("❌ Update error:", err.response?.data || err.message);
+        alert("🚫 Failed to update product");
       });
   };
 
@@ -355,12 +431,14 @@ const ProductMaster = () => {
     const fetchOptions = async () => {
       try {
         const [makeRes, warehouseRes, unitRes] = await Promise.all([
-          axios.get('https://kdstocksoft.onrender.com/make-helper'),
-          axios.get('https://kdstocksoft.onrender.com/warehouse'),
-          axios.get('https://kdstocksoft.onrender.com/unit'),
+          axios.get("https://kdstocksoft.onrender.com/make-helper"),
+          axios.get("https://kdstocksoft.onrender.com/warehouse"),
+          axios.get("https://kdstocksoft.onrender.com/unit"),
         ]);
         const makes = Array.isArray(makeRes.data) ? makeRes.data : [];
-        const warehouses = Array.isArray(warehouseRes.data) ? warehouseRes.data : [];
+        const warehouses = Array.isArray(warehouseRes.data)
+          ? warehouseRes.data
+          : [];
         const units = Array.isArray(unitRes.data) ? unitRes.data : [];
         setDropdownOptions({
           makes,
@@ -378,7 +456,7 @@ const ProductMaster = () => {
 
   // Helper for required red star
   const RequiredStar = () => (
-    <span style={{ color: 'red', marginLeft: 2 }}>*</span>
+    <span style={{ color: "red", marginLeft: 2 }}>*</span>
   );
 
   // Defensive helpers for dropdowns
@@ -444,8 +522,11 @@ const ProductMaster = () => {
                         <td>{product.Product_name}</td>
                         <td>{product.Model_no}</td>
                         <td>{product.Make}</td>
-                        <td>{product.Cost_price == null ? 'Rs 0.00' : 'Rs ' + product.Cost_price}</td>
-                        <td>{product.List_price == null ? 'Rs 0.00' : 'Rs ' + product.List_price}</td>
+                        <td>
+                          {product.Cost_price == null
+                            ? "Rs 0.00"
+                            : "Rs " + product.Cost_price}
+                        </td>
                         <td className="text-center">
                           <Button
                             variant="link"
@@ -465,14 +546,18 @@ const ProductMaster = () => {
                             onChange={async () => {
                               const isActive = activeStates[product.Id];
                               const confirmMessage = isActive
-                                ? 'Do you want to deactivate this product?'
-                                : 'Do you want to activate this product?';
+                                ? "Do you want to deactivate this product?"
+                                : "Do you want to activate this product?";
 
                               if (window.confirm(confirmMessage)) {
                                 await toggleActive(product.Id);
                                 const newStatus = !isActive;
                                 setTimeout(() => {
-                                  alert(newStatus ? 'Product activated' : 'Product inactivated');
+                                  alert(
+                                    newStatus
+                                      ? "Product activated"
+                                      : "Product inactivated",
+                                  );
                                 }, 300);
                               }
                             }}
@@ -496,15 +581,17 @@ const ProductMaster = () => {
       <Row className="mt-3">
         <Col className="text-center">
           <Form.Label>
-            Page:{' '}
+            Page:{" "}
             <Form.Select
-              style={{ display: 'inline-block', width: 'auto' }}
+              style={{ display: "inline-block", width: "auto" }}
               value={currentPage}
               onChange={(e) => setCurrentPage(Number(e.target.value))}
               size="sm"
             >
               {Array.from({ length: totalPages }, (_, i) => (
-                <option key={i + 1} value={i + 1}>{i + 1}</option>
+                <option key={i + 1} value={i + 1}>
+                  {i + 1}
+                </option>
               ))}
             </Form.Select>
           </Form.Label>
@@ -512,12 +599,20 @@ const ProductMaster = () => {
       </Row>
 
       {/* Edit Modal */}
-      <Modal show={showEditModal} onHide={() => setShowEditModal(false)} size="lg" centered>
+      <Modal
+        show={showEditModal}
+        onHide={() => setShowEditModal(false)}
+        size="lg"
+        centered
+      >
         <Modal.Header closeButton>
           <Modal.Title>Edit Product</Modal.Title>
         </Modal.Header>
         <Form
-          onSubmit={e => { e.preventDefault(); handleEditSubmit(); }}
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleEditSubmit();
+          }}
         >
           <Modal.Body>
             {/* 1st line: Product Name, HSN Code */}
@@ -529,9 +624,12 @@ const ProductMaster = () => {
                   </Form.Label>
                   <Form.Control
                     type="text"
-                    value={editProduct?.name || ''}
+                    value={editProduct?.name || ""}
                     onChange={(e) =>
-                      setEditProduct((prev) => ({ ...prev, name: e.target.value }))
+                      setEditProduct((prev) => ({
+                        ...prev,
+                        name: e.target.value,
+                      }))
                     }
                     required
                   />
@@ -544,9 +642,12 @@ const ProductMaster = () => {
                   </Form.Label>
                   <Form.Control
                     type="text"
-                    value={editProduct?.model || ''}
+                    value={editProduct?.model || ""}
                     onChange={(e) =>
-                      setEditProduct((prev) => ({ ...prev, model: e.target.value }))
+                      setEditProduct((prev) => ({
+                        ...prev,
+                        model: e.target.value,
+                      }))
                     }
                     required
                   />
@@ -555,7 +656,6 @@ const ProductMaster = () => {
             </Row>
             {/* 2nd line: Model No, Cost Price, List Price */}
             <Row {...formRowProps}>
-
               <Col {...twoLineColProps}>
                 <Form.Group>
                   <Form.Label>
@@ -564,7 +664,7 @@ const ProductMaster = () => {
                   <Form.Control
                     type="text"
                     name="HSNCode"
-                    value={editProduct?.HSNCode || ''}
+                    value={editProduct?.HSNCode || ""}
                     onChange={handleEditInputChange}
                     // removed required
                   />
@@ -577,15 +677,18 @@ const ProductMaster = () => {
                   </Form.Label>
                   <Form.Control
                     type="text"
-                    value={editProduct?.costprice || ''}
+                    value={editProduct?.costprice || ""}
                     onChange={(e) =>
-                      setEditProduct((prev) => ({ ...prev, costprice: e.target.value }))
+                      setEditProduct((prev) => ({
+                        ...prev,
+                        costprice: e.target.value,
+                      }))
                     }
                     required
                   />
                 </Form.Group>
               </Col>
-              <Col {...twoLineColProps}>
+              {/* <Col {...twoLineColProps}>
                 <Form.Group>
                   <Form.Label>
                     List Price <RequiredStar />
@@ -599,7 +702,7 @@ const ProductMaster = () => {
                     // removed required
                   />
                 </Form.Group>
-              </Col>
+              </Col> */}
             </Row>
             {/* 3rd line: Make, Product Category, Warehouse, Unit */}
             <Row {...formRowProps}>
@@ -610,16 +713,16 @@ const ProductMaster = () => {
                   </Form.Label>
                   <Form.Select
                     name="makeId"
-                    value={editProduct?.makeId || ''}
+                    value={editProduct?.makeId || ""}
                     onChange={(e) => {
                       const selectedId = e.target.value;
                       const selectedMake = makesArr.find(
-                        (make) => make.Id === parseInt(selectedId)
+                        (make) => make.Id === parseInt(selectedId),
                       );
                       setEditProduct((prev) => ({
                         ...prev,
                         makeId: selectedId,
-                        make: selectedMake?.Make || '',
+                        make: selectedMake?.Make || "",
                       }));
                     }}
                     required
@@ -636,20 +739,23 @@ const ProductMaster = () => {
               <Col {...threeLineColProps}>
                 <Form.Group>
                   <Form.Label>
-                    Product Category <RequiredStar />
+                    Product Category
+                    {productCategories.length > 0 && <RequiredStar />}
                   </Form.Label>
                   <Form.Select
                     name="pCatId"
-                    value={editProduct?.pCatId || ''}
-                    onChange={e =>
-                      setEditProduct(prev => ({
+                    value={editProduct?.pCatId || ""}
+                    onChange={(e) =>
+                      setEditProduct((prev) => ({
                         ...prev,
-                        pCatId: e.target.value
+                        pCatId: e.target.value,
                       }))
                     }
                     // NOT required now; now optional so user can skip
                     // Disabled if no makeId or if editProductCategories is empty
-                    disabled={!editProduct?.makeId || !editProductCategories.length}
+                    disabled={
+                      !editProduct?.makeId || !editProductCategories.length
+                    }
                   >
                     <option value="">Select Category</option>
                     {editProductCategories.map((option) => (
@@ -667,16 +773,16 @@ const ProductMaster = () => {
                   </Form.Label>
                   <Form.Select
                     name="whouseId"
-                    value={editProduct?.whouseId || ''}
+                    value={editProduct?.whouseId || ""}
                     onChange={(e) => {
                       const selectedId = e.target.value;
                       const selectedWh = warehousesArr.find(
-                        (wh) => wh.Id === parseInt(selectedId)
+                        (wh) => wh.Id === parseInt(selectedId),
                       );
                       setEditProduct((prev) => ({
                         ...prev,
                         whouseId: selectedId,
-                        warehouse: selectedWh?.Name || '',
+                        warehouse: selectedWh?.Name || "",
                       }));
                     }}
                     required
@@ -697,16 +803,16 @@ const ProductMaster = () => {
                   </Form.Label>
                   <Form.Select
                     name="unitId"
-                    value={editProduct?.unitId || ''}
+                    value={editProduct?.unitId || ""}
                     onChange={(e) => {
                       const selectedId = e.target.value;
                       const selectedUnit = unitsArr.find(
-                        (unit) => unit.Id === parseInt(selectedId)
+                        (unit) => unit.Id === parseInt(selectedId),
                       );
                       setEditProduct((prev) => ({
                         ...prev,
                         unitId: selectedId,
-                        unit: selectedUnit?.Name || '',
+                        unit: selectedUnit?.Name || "",
                       }));
                     }}
                     required
@@ -743,7 +849,10 @@ const ProductMaster = () => {
           <Modal.Title>Add Product</Modal.Title>
         </Modal.Header>
         <Form
-          onSubmit={e => { e.preventDefault(); handleSubmit(); }}
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+          }}
         >
           <Modal.Body>
             {/* 1st line: Product Name, HSN Code */}
@@ -807,7 +916,7 @@ const ProductMaster = () => {
                   />
                 </Form.Group>
               </Col>
-              <Col {...twoLineColProps}>
+              {/* <Col {...twoLineColProps}>
                 <Form.Group>
                   <Form.Label>
                     List Price <RequiredStar />
@@ -820,7 +929,7 @@ const ProductMaster = () => {
                     // removed required
                   />
                 </Form.Group>
-              </Col>
+              </Col> */}
             </Row>
             {/* 3rd line: Make, Product Category, Warehouse, Unit */}
             <Row {...formRowProps}>
@@ -847,7 +956,8 @@ const ProductMaster = () => {
               <Col {...threeLineColProps}>
                 <Form.Group>
                   <Form.Label>
-                    Product Category <RequiredStar />
+                    Product Category
+                    {editProductCategories.length > 0 && <RequiredStar />}
                   </Form.Label>
                   <Form.Select
                     name="pCatId"
