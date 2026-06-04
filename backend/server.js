@@ -329,7 +329,7 @@ app.get('/products', async (req, res) => {
   try {
     const [rows] = await pool.execute(`
 
-     select pm.Id, pm.Product_name, pm.Model_no, pm.Make_Id, mm.Make, pm.PCat_Id, pcm.Category, pm.Cost_price, pm.List_price, 
+     select pm.Id, pm.Product_name, pm.Model_no, pm.Make_Id, mm.Make, pm.PCat_Id, pcm.Category, pm.Cost_price, 
      pm.Whouse_Id, w.name, pm.Unit_Id, um.Unit, pm.HSNCode, pm.Active 
       from product_master as pm 
       join make_master as mm on pm.make_Id = mm.id
@@ -348,13 +348,13 @@ app.get('/products', async (req, res) => {
 });
 
 app.post('/products/create', async (req, res) => {
-  const { Product_name, Model_no, Make_Id, Cost_price, List_price, Whouse_Id, Unit_Id, PCat_Id, HSNCode, Created_By, Active, } = req.body;
+  const { Product_name, Model_no, Make_Id, Cost_price, Whouse_Id, Unit_Id, PCat_Id, HSNCode, Created_By, Active, } = req.body;
   try {
     const [result] = await pool.execute(
-      `INSERT INTO product_master (Product_name, Model_no, Make_Id, Cost_price, List_price, Whouse_Id, Unit_Id, PCat_Id, HSNCode,
+      `INSERT INTO product_master (Product_name, Model_no, Make_Id, Cost_price, Whouse_Id, Unit_Id, PCat_Id, HSNCode,
       Created_By, Active)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [Product_name, Model_no, Make_Id, Cost_price, List_price, Whouse_Id, Unit_Id, PCat_Id, HSNCode, Created_By, Active ? 1 : 0]
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [Product_name, Model_no, Make_Id, Cost_price, Whouse_Id, Unit_Id, PCat_Id, HSNCode, Created_By, Active ? 1 : 0]
     );
     res.status(201).json({
       Id: result.insertId, // Capital I
@@ -362,7 +362,6 @@ app.post('/products/create', async (req, res) => {
       Model_no,
       Make_Id,
       Cost_price,
-      List_price,
       Whouse_Id,
       Unit_Id,
       PCat_Id,
@@ -383,7 +382,6 @@ app.put('/products/:id', async (req, res) => {
     Model_no,
     Make_Id,
     Cost_price,
-    List_price,
     Whouse_Id,
     Unit_Id,
     PCat_Id,
@@ -393,12 +391,11 @@ app.put('/products/:id', async (req, res) => {
 
   try {
     await pool.execute(
-      `UPDATE product_master SET Product_name = ?, Model_no = ?, Make_Id = ?, Cost_price = ?, List_price = ?, Whouse_Id = ?, Unit_Id = ?, PCat_Id = ?, HSNCode = ?, Modified_By = ? WHERE Id = ?`,
+      `UPDATE product_master SET Product_name = ?, Model_no = ?, Make_Id = ?, Cost_price = ?, Whouse_Id = ?, Unit_Id = ?, PCat_Id = ?, HSNCode = ?, Modified_By = ? WHERE Id = ?`,
       [Product_name,
         Model_no,
         Make_Id,
         Cost_price,
-        List_price,
         Whouse_Id,
         Unit_Id,
         PCat_Id,
@@ -406,7 +403,7 @@ app.put('/products/:id', async (req, res) => {
         Modified_By, id]
     );
 
-    const [rows] = await pool.execute(` select pm.Id, pm.Product_name, pm.Model_no, pm.Make_Id, mm.Make, pm.PCat_Id, pcm.Category, pm.Cost_price, pm.List_price, 
+    const [rows] = await pool.execute(` select pm.Id, pm.Product_name, pm.Model_no, pm.Make_Id, mm.Make, pm.PCat_Id, pcm.Category, pm.Cost_price, 
      pm.Whouse_Id, w.name, pm.Unit_Id, um.Unit, pm.HSNCode, pm.Active 
       from product_master as pm 
       join make_master as mm on pm.make_Id = mm.id
@@ -427,7 +424,7 @@ app.post('/products/toggle', async (req, res) => {
   const { id } = req.body;
   try {
     await pool.execute(`UPDATE product_master SET Active = NOT Active WHERE Id = ?`, [id]);
-    const [rows] = await pool.execute(` select pm.Id, pm.Product_name, pm.Model_no, pm.Make_Id, mm.Make, pm.PCat_Id, pcm.Category, pm.Cost_price, pm.List_price, 
+    const [rows] = await pool.execute(` select pm.Id, pm.Product_name, pm.Model_no, pm.Make_Id, mm.Make, pm.PCat_Id, pcm.Category, pm.Cost_price, 
      pm.Whouse_Id, w.name, pm.Unit_Id, um.Unit, pm.Active 
       from product_master as pm 
       join make_master as mm on pm.make_Id = mm.id
