@@ -31,20 +31,14 @@ const PURPOSE_OPTIONS = [
 const DISPATCH_PACKING = [
   { value: "", label: "Select" },
   { value: "Santanu", label: "Santanu" },
-  { value: "Shuvankar", label: "Shuvankar" },
-  { value: "Sudhanshu", label: "Sudhanshu" },
-  { value: "Sourav", label: "Sourav" },
   { value: "Rakesh", label: "Rakesh" },
   { value: "By Vendor", label: "By Vendor" },
 ];
 
 const DISPATCH_CHECKING = [
   { value: "", label: "Select" },
+  { value: "Rashmi Sir", label: "Rashmi Sir" },
   { value: "Santanu", label: "Santanu" },
-  { value: "Shuvankar", label: "Shuvankar" },
-  { value: "Sourav", label: "Sourav" },
-  { value: "Sudhanshu", label: "Sudhanshu" },
-  { value: "Kaniska", label: "Kaniska" },
   { value: "Srijan", label: "Srijan" },
   { value: "Sampurna", label: "Sampurna" },
   { value: "Rakesh", label: "Rakesh" },
@@ -53,9 +47,6 @@ const DISPATCH_CHECKING = [
 const DISPATCH_DELIVERY = [
   { value: "", label: "Select" },
   { value: "Santanu", label: "Santanu" },
-  { value: "Shuvankar", label: "Shuvankar" },
-  { value: "Sourav", label: "Sourav" },
-  { value: "Sudhanshu", label: "Sudhanshu" },
   { value: "Collect from Office", label: "Collect from Office" },
   { value: "Porter", label: "Porter" },
   { value: "Rapido", label: "Rapido" },
