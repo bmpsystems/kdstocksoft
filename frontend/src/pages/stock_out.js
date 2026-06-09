@@ -834,7 +834,7 @@ const StockOut = () => {
                 confirmButtonColor: "#3085d6",
               });
 
-              showLowStockAlert(response.data.lowStockItems);
+              // showLowStockAlert(response.data.lowStockItems);
             }, 300);
 
             fetchProducts();
@@ -922,7 +922,7 @@ const StockOut = () => {
             confirmButtonText: "OK",
             confirmButtonColor: "#3085d6",
           }).then(() => {
-            showLowStockAlert(response.data.lowStockItems);
+            // showLowStockAlert(response.data.lowStockItems);
           });
         }, 300);
 
@@ -970,34 +970,34 @@ const StockOut = () => {
     }
   };
 
-  const showLowStockAlert = (items) => {
-    if (!items || items.length === 0) return;
+  // const showLowStockAlert = (items) => {
+  //   if (!items || items.length === 0) return;
 
-    let html = `
-    <div style="text-align:left">
-      <b>Following products are below minimum stock level (10):</b>
-      <br/><br/>
-  `;
+  //   let html = `
+  //   <div style="text-align:left">
+  //     <b>Following products are below minimum stock level (10):</b>
+  //     <br/><br/>
+  // `;
 
-    items.forEach((item) => {
-      html += `
-      • ${item.Product_name}
-      (${item.Model_no || "-"})
-      - Qty: ${item.Quantity}
-      <br/>
-    `;
-    });
+  //   items.forEach((item) => {
+  //     html += `
+  //     • ${item.Product_name}
+  //     (${item.Model_no || "-"})
+  //     - Qty: ${item.Quantity}
+  //     <br/>
+  //   `;
+  //   });
 
-    html += `</div>`;
+  //   html += `</div>`;
 
-    Swal.fire({
-      icon: "warning",
-      title: "⚠ Low Stock Alert",
-      html,
-      width: 700,
-      confirmButtonColor: "#d33",
-    });
-  };
+  //   Swal.fire({
+  //     icon: "warning",
+  //     title: "⚠ Low Stock Alert",
+  //     html,
+  //     width: 700,
+  //     confirmButtonColor: "#d33",
+  //   });
+  // };
 
   // Toggle active
   const toggleActive = async (id) => {
@@ -1214,7 +1214,7 @@ const StockOut = () => {
                           confirmButtonColor: "#3085d6",
                         });
 
-                        showLowStockAlert(response.data.lowStockItems);
+                        // showLowStockAlert(response.data.lowStockItems);
                       }
                     }}
                     label=""
