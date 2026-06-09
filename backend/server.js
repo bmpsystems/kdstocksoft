@@ -547,10 +547,10 @@ SELECT
   cm.Website, 
   cm.Internal_Note, 
   cm.Active
-FROM stock_mngoldkd.company_master AS cm
-INNER JOIN stock_mngoldkd.category_master AS catm ON cm.Cat_Id = catm.Id
-INNER JOIN stock_mngoldkd.region_master AS regm ON cm.Region_Id = regm.Id
-INNER JOIN stock_mngoldkd.type_master AS typm ON cm.Type_Id = typm.Id
+FROM stock_management.company_master AS cm
+INNER JOIN stock_management.category_master AS catm ON cm.Cat_Id = catm.Id
+INNER JOIN stock_management.region_master AS regm ON cm.Region_Id = regm.Id
+INNER JOIN stock_management.type_master AS typm ON cm.Type_Id = typm.Id
 WHERE (cm.Company LIKE ? OR cm.Gstin LIKE ? OR cm.Pan LIKE ?)
   AND cm.Active = 1
 ORDER BY cm.Company ASC
@@ -670,7 +670,7 @@ SELECT
     pm.PCat_Id,
     pcm.Category,
     pm.HSNCode
-FROM stock_mngoldkd.stock AS ms
+FROM stock_management.stock AS ms
 LEFT JOIN (
     SELECT Prod_Id, SUM(Quantity) AS defective_qty
     FROM defective_items
@@ -2626,7 +2626,7 @@ app.get('/defective', async (req, res) => {
     SELECT 
       ms.Id, ms.Prod_Id, pm.Product_name, pm.Model_no, pm.Make_Id, mm.Make, ms.Quantity,
       pm.Unit_Id, um.Unit, pm.Cost_Price, pm.Whouse_Id, wm.Name, pm.PCat_Id, pcm.Category, pm.HSNCode
-    FROM stock_mngoldkd.defective_items AS ms
+    FROM stock_management.defective_items AS ms
     LEFT JOIN product_master AS pm ON ms.Prod_Id = pm.Id
     LEFT JOIN make_master AS mm ON pm.Make_Id = mm.Id
     LEFT JOIN unit_master AS um ON pm.Unit_Id = um.Id
@@ -2673,7 +2673,7 @@ SELECT
   pcm.Category,
   pm.Whouse_Id,
   wm.Name
-FROM stock_mngoldkd.stock AS ms
+FROM stock_management.stock AS ms
 JOIN product_master AS pm ON ms.Prod_Id = pm.Id
 JOIN make_master AS mm ON pm.Make_Id = mm.Id
 JOIN unit_master AS um ON pm.Unit_Id = um.Id
@@ -2796,10 +2796,10 @@ app.get('/company', async (req, res) => {
   try {
     const [rows] = await pool.execute(`
       Select cm.Id, cm.Company, cm.Address, cm.Cat_Id, catm.Category, cm.Region_Id, regm.Region, cm.Type_Id, cm.Website, cm.Pan, cm.Gstin, cm.Internal_Note, typm.Type, cm.Active
-      from stock_mngoldkd.company_master as cm
-      inner join stock_mngoldkd.category_master as catm on cm.Cat_Id = catm.id
-      inner join stock_mngoldkd.region_master as regm on cm.Region_Id = regm.id
-      inner join stock_mngoldkd.type_master as typm on cm.Type_Id = typm.id
+      from stock_management.company_master as cm
+      inner join stock_management.category_master as catm on cm.Cat_Id = catm.id
+      inner join stock_management.region_master as regm on cm.Region_Id = regm.id
+      inner join stock_management.type_master as typm on cm.Type_Id = typm.id
       ${whereString}
     `, params);
     res.json(rows);
@@ -2897,10 +2897,10 @@ app.put('/company/:id', async (req, res) => {
     const [rows] = await pool.execute(`SELECT 
         cm.Id, cm.Company, cm.Address, cm.Cat_Id, catm.Category, 
         cm.Region_Id, regm.Region, cm.Type_Id, cm.Website, cm.Pan, cm.Gstin, cm.Internal_Note, typm.Type, cm.Active
-      FROM stock_mngoldkd.company_master AS cm
-      INNER JOIN stock_mngoldkd.category_master AS catm ON cm.Cat_Id = catm.id
-      INNER JOIN stock_mngoldkd.region_master AS regm ON cm.Region_Id = regm.id
-      INNER JOIN stock_mngoldkd.type_master AS typm ON cm.Type_Id = typm.id
+      FROM stock_management.company_master AS cm
+      INNER JOIN stock_management.category_master AS catm ON cm.Cat_Id = catm.id
+      INNER JOIN stock_management.region_master AS regm ON cm.Region_Id = regm.id
+      INNER JOIN stock_management.type_master AS typm ON cm.Type_Id = typm.id
       WHERE cm.Id = ?`, [id]);
     res.json(rows[0]); // Return updated product
   } catch (err) {
@@ -2916,10 +2916,10 @@ app.post('/company/toggle', async (req, res) => {
     const [rows] = await pool.execute(`SELECT 
       cm.Id, cm.Company, cm.Address, cm.Cat_Id, catm.Category, 
       cm.Region_Id, regm.Region, cm.Type_Id, cm.Website, cm.Pan, cm.Gstin, cm.Internal_Note, typm.Type, cm.Active
-    FROM stock_mngoldkd.company_master AS cm
-    INNER JOIN stock_mngoldkd.category_master AS catm ON cm.Cat_Id = catm.id
-    INNER JOIN stock_mngoldkd.region_master AS regm ON cm.Region_Id = regm.id
-    INNER JOIN stock_mngoldkd.type_master AS typm ON cm.Type_Id = typm.id
+    FROM stock_management.company_master AS cm
+    INNER JOIN stock_management.category_master AS catm ON cm.Cat_Id = catm.id
+    INNER JOIN stock_management.region_master AS regm ON cm.Region_Id = regm.id
+    INNER JOIN stock_management.type_master AS typm ON cm.Type_Id = typm.id
     WHERE cm.Id = ?`, [id]);
     res.json(rows[0]);
   } catch (err) {
