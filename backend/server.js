@@ -2975,7 +2975,7 @@ app.post('/users/create', async (req, res) => {
 
   try {
     const [result] = await pool.execute(
-      `INSERT INTO Users (username, name, password, Dept_Id, Role_Id, Active)
+      `INSERT INTO users (username, name, password, Dept_Id, Role_Id, Active)
        VALUES (?, ?, ?, ?, ?, ?)`,
       [safeUsername, safename, safePassword, safeDeptId, safeRoleId, safeActive]
     );
@@ -3012,7 +3012,7 @@ app.put('/users/:id', async (req, res) => {
 
   try {
     await pool.execute(
-      `UPDATE Users SET username = ?, name = ?, password = ?, Dept_Id = ?, Role_Id = ? WHERE Id = ?`,
+      `UPDATE users SET username = ?, name = ?, password = ?, Dept_Id = ?, Role_Id = ? WHERE Id = ?`,
       [safeUsername, safename, safePassword, safeDeptId, safeRoleId, id]
     );
 
@@ -3039,7 +3039,7 @@ app.put('/users/:id', async (req, res) => {
 app.post('/users/toggle', async (req, res) => {
   const { id } = req.body;
   try {
-    await pool.execute(`UPDATE Users SET Active = NOT Active WHERE Id = ?`, [id]);
+    await pool.execute(`UPDATE users SET Active = NOT Active WHERE Id = ?`, [id]);
     const [rows] = await pool.execute(`SELECT 
   usm.id, 
   usm.username, 
