@@ -294,6 +294,7 @@ const StockOut = () => {
                   Cost_price: item.Cost_price ?? "",
                   Make: item.Make ?? "",
                   Model_no: item.Model_no ?? "",
+                  Product_name: item.Product_name ?? "",
                   Unit_Id: item.Unit_Id ?? "",
                   Unit: item.Unit ?? "",
                   Warehouse: item.Name ?? "", // Add warehouse
@@ -1493,7 +1494,6 @@ const StockOut = () => {
                         >
                           <strong>
                             {/* Show Product Name and Model No in dropdown */}
-                            {item.Product_name}
                             {item.Model_no && ` (Model: ${item.Model_no})`}
                             {item.Quantity !== undefined &&
                             item.Quantity !== null
