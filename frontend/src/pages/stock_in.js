@@ -1171,6 +1171,7 @@ const StockIn = () => {
                     <strong>
               
                         {" (Model :" + " "+item.Model_no+")"}
+        {" (Qty :" + " "+item.Quantity+")"}
                     </strong>
                     {/* {item.Warehouse && (
                         <div className="text-muted small">Warehouse: {item.Warehouse}</div>
