@@ -455,9 +455,10 @@ app.get('/product-search', async (req, res) => {
 
   // Remove the semicolon before LIMIT to fix SQL syntax error
   const sql = `
-    SELECT 
+   SELECT 
       a.Id, 
       a.Product_name, 
+      st.Quantity,
       a.Make_Id, 
       b.Make, 
       a.Model_no, 
@@ -469,6 +470,7 @@ app.get('/product-search', async (req, res) => {
     LEFT JOIN make_master AS b ON a.Make_Id = b.Id
     LEFT JOIN unit_master AS c ON a.Unit_Id = c.Id
     LEFT JOIN warehouse AS d ON d.Id = a.Whouse_Id
+    left JOIN stock st on st.Prod_Id = a.Id
     WHERE (a.Product_name LIKE ? OR a.Model_no LIKE ?)
       AND a.Active = 1
     LIMIT 20
