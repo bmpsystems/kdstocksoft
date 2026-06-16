@@ -1169,7 +1169,7 @@ const StockIn = () => {
                     onClick={() => handleProductSelect(item)}
                 >
                     <strong>
-                        {item.Product_name}
+              
                         {" (Model :" + " "+item.Model_no+")"}
                     </strong>
                     {/* {item.Warehouse && (
