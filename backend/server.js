@@ -457,7 +457,6 @@ app.get('/product-search', async (req, res) => {
   const sql = `
     SELECT 
       a.Id, 
-      a.Product_name, 
       a.Make_Id, 
       b.Make, 
       a.Model_no, 
@@ -495,7 +494,6 @@ app.get('/stock-search', async (req, res) => {
   const sql = `
 SELECT 
   st.Prod_Id AS Id,
-  pm.Product_name, 
   pm.Model_no, 
   pm.Cost_price, 
   pm.Make_Id, 
