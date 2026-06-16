@@ -294,7 +294,6 @@ const StockOut = () => {
                   Cost_price: item.Cost_price ?? "",
                   Make: item.Make ?? "",
                   Model_no: item.Model_no ?? "",
-                  Product_name: item.Product_name ?? "",
                   Unit_Id: item.Unit_Id ?? "",
                   Unit: item.Unit ?? "",
                   Warehouse: item.Name ?? "", // Add warehouse
