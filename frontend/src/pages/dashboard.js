@@ -290,6 +290,94 @@ const DashboardPg = () => {
   }
 
   // --- Stat Card Data ---
+  // const statCards = [
+  //   {
+  //     title: "Total Products",
+  //     value: totalProducts.toLocaleString(),
+  //     icon: (
+  //       <MdInventory
+  //         size={36}
+  //         style={{
+  //           color: "#fff",
+  //           background: "#2980f2",
+  //           borderRadius: 8,
+  //           padding: 6,
+  //         }}
+  //       />
+  //     ),
+  //     color: "#2980f2",
+  //     sub: (
+  //       <span style={{ color: "#b3e5fc" }}>
+  //         <IoMdTrendingUp /> +2% from last month
+  //       </span>
+  //     ),
+  //        onClick: () => window.open("https://bmpsystems.in", "_blank"),
+  //   },
+  //   {
+  //     title: "Low Stock Items",
+  //     value: lowStockItems,
+  //     icon: (
+  //       <FaExclamationTriangle
+  //         size={32}
+  //         style={{
+  //           color: "#fff",
+  //           background: "#f1c40f",
+  //           borderRadius: 8,
+  //           padding: 6,
+  //         }}
+  //       />
+  //     ),
+  //     color: "#f1c40f",
+  //     sub: (
+  //       <span style={{ color: "#fffbe6" }}>
+  //         <FaBolt /> Needs Attention
+  //       </span>
+  //     ),
+  //   },
+  //   {
+  //     title: "Out of Stock",
+  //     value: outOfStock,
+  //     icon: (
+  //       <FaTimesCircle
+  //         size={32}
+  //         style={{
+  //           color: "#fff",
+  //           background: "#e74c3c",
+  //           borderRadius: 8,
+  //           padding: 6,
+  //         }}
+  //       />
+  //     ),
+  //     color: "#e74c3c",
+  //     sub: (
+  //       <span style={{ color: "#ffd6d6" }}>
+  //         <FaExclamationTriangle /> Urgent Action
+  //       </span>
+  //     ),
+  //   },
+  //   {
+  //     title: "Inventory Value",
+  //     value: `₹${totalInventoryValue.toLocaleString()}`,
+  //     icon: (
+  //       <FaRupeeSign
+  //         size={32}
+  //         style={{
+  //           color: "#fff",
+  //           background: "#27ae60",
+  //           borderRadius: 8,
+  //           padding: 6,
+  //         }}
+  //       />
+  //     ),
+  //     color: "#27ae60",
+  //     sub: (
+  //       <span style={{ color: "#b9f6ca" }}>
+  //         <IoMdTrendingUp /> +1.5% this quarter
+  //       </span>
+  //     ),
+  //   },
+  // ];
+
   const statCards = [
     {
       title: "Total Products",
@@ -311,6 +399,7 @@ const DashboardPg = () => {
           <IoMdTrendingUp /> +2% from last month
         </span>
       ),
+      onClick: () => window.open("https://kdstocksoft.vercel.app/products", "_blank"),
     },
     {
       title: "Low Stock Items",
@@ -332,6 +421,7 @@ const DashboardPg = () => {
           <FaBolt /> Needs Attention
         </span>
       ),
+      onClick: () => window.open("https://kdstocksoft.vercel.app/low-stock", "_blank"),
     },
     {
       title: "Out of Stock",
@@ -353,6 +443,7 @@ const DashboardPg = () => {
           <FaExclamationTriangle /> Urgent Action
         </span>
       ),
+      onClick: () => window.open("https://kdstocksoft.vercel.app/out-of-stock", "_blank"),
     },
     {
       title: "Inventory Value",
@@ -374,15 +465,16 @@ const DashboardPg = () => {
           <IoMdTrendingUp /> +1.5% this quarter
         </span>
       ),
+      onClick: () => window.open("https://kdstocksoft.vercel.app/stock-summary", "_blank"),
     },
   ];
 
   // --- Dashboard Header Gradient ---
   const headerGradient = "linear-gradient(90deg, #2980f2 0%, #27ae60 100%)";
 
-const recentStockIn = [...stockIn]
-  .sort((a, b) => Number(b.Id) - Number(a.Id))
-  .slice(0, 10);
+  const recentStockIn = [...stockIn]
+    .sort((a, b) => Number(b.Id) - Number(a.Id))
+    .slice(0, 10);
 
   return (
     <Container
@@ -489,7 +581,9 @@ const recentStockIn = [...stockIn]
               >
                 <Card
                   className="shadow-lg border-0"
+                  onClick={card.onClick}
                   style={{
+                    cursor: "pointer",
                     background: `linear-gradient(120deg, ${card.color} 80%, #fff 100%)`,
                     color: "#fff",
                     borderRadius: 18,
