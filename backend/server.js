@@ -4108,90 +4108,90 @@ app.post('/unit/toggle', async (req, res) => {
 
 // Get stock movement (in/out) details for a product (autocomplete/search helper)
 app.get('/product-movement-search', async (req, res) => {
-  const { query } = req.query;
+  const { prodId } = req.query;
 
-  // Only search if at least 3 characters are entered
-  if (!query || query.length < 3) {
-    return res.status(400).json({ message: 'Please enter at least 3 characters.' });
+  if (!prodId) {
+    return res.status(400).json({
+      message: 'Product Id is required'
+    });
   }
-
-  // Using parameterized queries for safety
-  // We'll use ? as prepared statement and fill with `%${query}%`
-  const searchTerm = `%${query}%`;
 
   const sql = `
     SELECT
-        p.Id                AS Prod_Id,
+        p.Id AS Prod_Id,
         p.Product_name,
         p.Model_no,
-        'IN'                AS Txn_Type,
+        stk.Quantity,
+        'IN' AS Txn_Type,
         si.Invoice_No,
-        si.Challan          AS Delivery_Challan,
-        si.Created_On       AS Txn_Date,
+        si.Challan AS Delivery_Challan,
+        si.Invoice_Date AS Txn_Date,
         ppd.Quantity,
-        cm.Company          AS Company_Name
+        cm.Company AS Company_Name
     FROM product_master p
-    JOIN product_purchase_details ppd
+    inner JOIN stock stk
+        ON stk.Prod_Id = p.Id
+    INNER JOIN product_purchase_details ppd
         ON ppd.Prod_Id = p.Id
-    JOIN stock_in si
+    INNER JOIN stock_in si
         ON si.Invoice_No = ppd.Invoice_No
-    JOIN company_master cm
+    INNER JOIN company_master cm
         ON cm.Id = si.Comp_Id
     WHERE
         p.Active = 1
         AND si.Active = 1
         AND cm.Active = 1
-        AND (
-             p.Product_name LIKE ?
-          OR p.Model_no     LIKE ?
-        )
+        AND p.Id = ?
+
     UNION ALL
+
     SELECT
-        p.Id                AS Prod_Id,
+        p.Id AS Prod_Id,
         p.Product_name,
         p.Model_no,
-        'OUT'               AS Txn_Type,
+        stk.Quantity,
+        'OUT' AS Txn_Type,
         so.Invoice_No,
-        so.Delivery_Challan AS Delivery_Challan,
-        so.Invoice_Date     AS Txn_Date,
+        so.Delivery_Challan,
+        so.Invoice_Date AS Txn_Date,
         psd.Quantity,
-        cm.Company          AS Company_Name
+        cm.Company AS Company_Name
     FROM product_master p
-    JOIN product_sold_details psd
+    inner JOIN stock stk
+        ON stk.Prod_Id = p.Id
+    INNER JOIN product_sold_details psd
         ON psd.Prod_Id = p.Id
-    JOIN stock_out so
+    INNER JOIN stock_out so
         ON (
             so.Invoice_No = psd.Invoice_No
             OR so.Delivery_Challan = psd.Delivery_Challan
         )
-    JOIN company_master cm
+    INNER JOIN company_master cm
         ON cm.Id = so.Comp_Id
     WHERE
         p.Active = 1
         AND so.Active = 1
         AND cm.Active = 1
-        AND (
-             p.Product_name LIKE ?
-          OR p.Model_no     LIKE ?
-        )
-    ORDER BY
-        Txn_Date DESC,
-        Txn_Type
-    LIMIT 100
+        AND p.Id = ?
+
+    ORDER BY Txn_Date DESC
   `;
 
   try {
-    // Fill parameters for both UNION queries
-    // Params: IN: [Product_name, Model_no], OUT: [Product_name, Model_no]
-    const params = [searchTerm, searchTerm, searchTerm, searchTerm];
-    const [rows] = await pool.execute(sql, params);
+    const [rows] = await pool.execute(sql, [
+      prodId,
+      prodId
+    ]);
+
     res.json(rows);
   } catch (err) {
-    console.error('Product movement search error:', err.message);
-    res.status(500).json({ error: 'Internal server error', details: err.message });
+    console.error(err);
+
+    res.status(500).json({
+      error: 'Internal Server Error'
+    });
   }
 });
-
 /////////////////////////
 
 /**
