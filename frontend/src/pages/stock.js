@@ -146,7 +146,7 @@ const Stock = () => {
 
     // Helper to determine if a row should be red
     const isLowStock = (stock) => {
-        return Number(stock.stock_qty) < 50;
+        return Number(stock.stock_qty) < 10;
     };
 
     // Get selected make name
