@@ -40,7 +40,7 @@ const LowStock = () => {
         "Total Price"
     ];
 
-    const API_URL = 'http://kdstocksoft.onrender.com/low-stock';
+    const API_URL = 'https://kdstocksoft.onrender.com/low-stock';
 
     useEffect(() => {
         axios.get(API_URL)
