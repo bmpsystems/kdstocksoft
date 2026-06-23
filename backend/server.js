@@ -620,7 +620,7 @@ JOIN product_master AS pm ON st.Prod_Id = pm.Id
 LEFT JOIN make_master AS mm ON pm.Make_Id = mm.Id
 LEFT JOIN minimum_stock AS ms ON ms.Prod_Id = st.Prod_Id
 LEFT JOIN unit_master AS um ON pm.Unit_Id = um.Id
-WHERE st.Quantity < 50;  
+WHERE st.Quantity < 10;  
       `);
     res.json(rows);
   } catch (err) {
