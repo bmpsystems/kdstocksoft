@@ -84,7 +84,7 @@ const MinimumStock = () => {
     return (
         <div style={{ padding: '20px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                <h2 style={{ margin: 0 }}>Minimum Stock List <span style={{ fontWeight: 400, fontSize: 26, color: '#888' }}>(Qty &lt; 50 Nos)</span></h2>
+                <h2 style={{ margin: 0 }}>Minimum Stock List <span style={{ fontWeight: 400, fontSize: 26, color: '#888' }}>(Qty &lt; 10 Nos)</span></h2>
                 <button style={styles.button} onClick={handleExportExcel}>Export Excel</button>
             </div>
 
