@@ -347,6 +347,68 @@ app.get('/products', async (req, res) => {
   }
 });
 
+// List Out Of Stock List
+
+app.get("/out-of-stock", async (req, res) => {
+  try {
+    const [rows] = await pool.execute(`
+SELECT 
+  st.Id,
+  st.Prod_Id,
+  pm.Product_name,
+  pm.Model_no,
+  pm.Make_Id,
+  mm.Make,
+  st.Quantity,
+    pm.Cost_price,
+  pm.Unit_Id,
+  um.Unit
+FROM stock AS st
+JOIN product_master AS pm ON st.Prod_Id = pm.Id
+LEFT JOIN make_master AS mm ON pm.Make_Id = mm.Id
+LEFT JOIN minimum_stock AS ms ON ms.Prod_Id = st.Prod_Id
+LEFT JOIN unit_master AS um ON pm.Unit_Id = um.Id
+WHERE st.Quantity = 0;  
+      `);
+    res.json(rows);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ error: "Error fetching products", details: err.message });
+  }
+});
+
+// List Low Stock List
+
+app.get("/low-stock", async (req, res) => {
+  try {
+    const [rows] = await pool.execute(`
+SELECT 
+  st.Id,
+  st.Prod_Id,
+  pm.Product_name,
+  pm.Model_no,
+  pm.Make_Id,
+  mm.Make,
+  st.Quantity,
+    pm.Cost_price,
+  pm.Unit_Id,
+  um.Unit
+FROM stock AS st
+JOIN product_master AS pm ON st.Prod_Id = pm.Id
+LEFT JOIN make_master AS mm ON pm.Make_Id = mm.Id
+LEFT JOIN minimum_stock AS ms ON ms.Prod_Id = st.Prod_Id
+LEFT JOIN unit_master AS um ON pm.Unit_Id = um.Id
+WHERE st.Quantity > 0 && st.Quantity <= 10;  
+      `);
+    res.json(rows);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ error: "Error fetching products", details: err.message });
+  }
+});
+
 app.post('/products/create', async (req, res) => {
   const { Product_name, Model_no, Make_Id, Cost_price, Whouse_Id, Unit_Id, PCat_Id, HSNCode, Created_By, Active, } = req.body;
   try {
