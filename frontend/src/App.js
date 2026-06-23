@@ -10,7 +10,7 @@ import Stocksummary from './pages/stock_summary';
 import Home from './pages/home';
 import CustomerReport from './pages/customerReport';
 import EmailMarketing from './pages/emailMarketing';
-import MinimumStock from './pages/minimum_stock';
+import OutOfStock from './pages/outOfStock';
 import ProductCategoryMaster from './pages/productCategoryMaster';
 import Stock from './pages/stock';
 import StockIn from './pages/stock_in';
@@ -44,6 +44,7 @@ import AssignMaster from './pages/assignMaster';
 import EnquiryMaster from './pages/enquiryMaster';
 import MyProfile from './pages/myprofile';
 import DefectiveItems from './pages/defectiveItems';
+import LowStock from './pages/lowStock';
 import DefectiveReport from './pages/defectiveReport';
 
 function App() {
@@ -67,6 +68,7 @@ function App() {
           <Route path="defective-report" element={<DefectiveReport />} />
           <Route path="email-marketing" element={<EmailMarketing />} />
           <Route path="settings" element={<SettingsPg />} />
+          <Route path="low-stock" element={<LowStock />} />
           <Route path="products" element={<ProductMaster />} />
           <Route path="defective-items" element={<DefectiveItems />} />
           <Route path="assign-master" element={<AssignMaster />} />
@@ -88,7 +90,7 @@ function App() {
           <Route path="customer-report" element={<CustomerReport />} />
           <Route path="company-category" element={<CategoryMaster />} />
           <Route path="stock-summary" element={<Stocksummary />} />
-          <Route path="minimum-stock" element={<MinimumStock />} />
+          <Route path="out-of-stock" element={<OutOfStock />} />
           <Route path="stock" element={<Stock />} />
           <Route path="stock-in" element={<StockIn />} />
           <Route path="stock-out" element={<StockOut />} />
