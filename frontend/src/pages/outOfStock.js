@@ -40,7 +40,7 @@ const OutOfStock = () => {
         "Total Price"
     ];
 
-    const API_URL = 'http://kdstocksoft.onrender.com/out-of-stock';
+    const API_URL = 'https://kdstocksoft.onrender.com/out-of-stock';
 
     useEffect(() => {
         axios.get(API_URL)
