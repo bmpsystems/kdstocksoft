@@ -512,7 +512,7 @@ const DashboardPg = () => {
           >
             Stock Dashboard
           </h2>
-        // </div>
+         </div>
         // <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
         //   <OverlayTrigger
         //     placement="bottom"
