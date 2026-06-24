@@ -512,33 +512,33 @@ const DashboardPg = () => {
           >
             Stock Dashboard
           </h2>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <OverlayTrigger
-            placement="bottom"
-            overlay={<Tooltip>Quick Report</Tooltip>}
-          >
-            <Button
-              variant="light"
-              style={{
-                background: "#fff",
-                color: "#2980f2",
-                fontWeight: 700,
-                borderRadius: 8,
-                boxShadow: "0 2px 8px #2980f222",
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                fontSize: 16,
-              }}
-              onClick={() => setShowQuickReport(true)}
-            >
-              <MdReport size={22} />
-              Quick Report
-            </Button>
-          </OverlayTrigger>
-        </div>
-      </div>
+        // </div>
+        // <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+        //   <OverlayTrigger
+        //     placement="bottom"
+        //     overlay={<Tooltip>Quick Report</Tooltip>}
+        //   >
+        //     <Button
+        //       variant="light"
+        //       style={{
+        //         background: "#fff",
+        //         color: "#2980f2",
+        //         fontWeight: 700,
+        //         borderRadius: 8,
+        //         boxShadow: "0 2px 8px #2980f222",
+        //         display: "flex",
+        //         alignItems: "center",
+        //         gap: 8,
+        //         fontSize: 16,
+        //       }}
+        //       onClick={() => setShowQuickReport(true)}
+        //     >
+        //       <MdReport size={22} />
+        //       Quick Report
+        //     </Button>
+        //   </OverlayTrigger>
+        // </div>
+      // </div>
 
       {/* Quick Report Modal */}
       <QuickReportModal
