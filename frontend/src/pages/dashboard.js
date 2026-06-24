@@ -36,7 +36,7 @@ import { IoMdTrendingUp, IoMdTrendingDown } from "react-icons/io";
 const API_STOCK = "https://kdstocksoft.onrender.com/stock-dashboard";
 const API_STOCKIN = "https://kdstocksoft.onrender.com/stock-in-dashboard";
 const API_STOCKOUT = "https://kdstocksoft.onrender.com/stock-out-dashboard";
-const API_MINIMUM = "https://kdstocksoft.onrender.com/minimum-stock";
+const API_LOW = "https://kdstocksoft.onrender.com/low-stock";
 const monthNames = [
   "Jan",
   "Feb",
@@ -66,7 +66,7 @@ const DashboardPg = () => {
       fetch(API_STOCK).then((r) => r.json()),
       fetch(API_STOCKIN).then((r) => r.json()),
       fetch(API_STOCKOUT).then((r) => r.json()),
-      fetch(API_MINIMUM).then((r) => r.json()),
+      fetch(API_LOW).then((r) => r.json()),
     ])
       .then(([stockData, stockInData, stockOutData, minStockData]) => {
         setStock(stockData);
