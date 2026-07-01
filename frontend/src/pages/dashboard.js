@@ -974,18 +974,24 @@ const DashboardPg = () => {
                           <th>USER</th>
                         </tr>
                       </thead>
-                      <tbody>
+         <tbody>
                         {adjustments.map((adj) => (
                           <tr key={adj.id}>
-                            {/* <td style={{ fontWeight: 600 }}>{adj.id.replace("ADJ-", "")}</td> */}
                             {/* Show Invoice No if present */}
-                            <td>
+                            <td
+                              style={{
+                                color: "#2980f2",
+                                fontWeight: 600,
+                              }}
+                            >
                               {adj.invoiceNo
                                 ? adj.invoiceNo +
                                   (adj.challan ? " " + adj.challan : "")
                                 : adj.challan || ""}
                             </td>
+
                             <td>{adj.modelNo}</td>
+
                             <td>
                               <Badge
                                 bg="danger"
@@ -998,6 +1004,7 @@ const DashboardPg = () => {
                                 {adj.quantity}
                               </Badge>
                             </td>
+
                             <td>{adj.date}</td>
                             <td>{adj.user}</td>
                           </tr>
