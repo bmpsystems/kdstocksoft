@@ -874,7 +874,7 @@ const DashboardPg = () => {
                       >
                         <tr>
                           <th>PO NO</th>
-                          <th>MODEL</th>
+                          <th>PRODUCT</th>
                           <th>QTY</th>
                           <th>DATE</th>
                           <th>USER</th>
