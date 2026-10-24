@@ -32,12 +32,12 @@ const DISPATCH_PACKING = [
   { value: "", label: "Select" },
   { value: "Santanu", label: "Santanu" },
   { value: "Rakesh", label: "Rakesh" },
+  { value: "Srijan", label: "Srijan" },
   { value: "By Vendor", label: "By Vendor" },
 ];
 
 const DISPATCH_CHECKING = [
   { value: "", label: "Select" },
-  { value: "Rashmi Sir", label: "Rashmi Sir" },
   { value: "Santanu", label: "Santanu" },
   { value: "Srijan", label: "Srijan" },
   { value: "Sampurna", label: "Sampurna" },
