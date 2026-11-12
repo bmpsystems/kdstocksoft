@@ -50,7 +50,7 @@ const TopBar = () => {
     <div className="topbar">
       {/* Center Title */}
     <div className="topbar-title">
-      KD Stock Software
+      KD Stock Software (Managed by Santanu Mondol)
     </div>
       <div className="user-info-wrapper" ref={dropdownRef}>
         <div className="user-text">
