@@ -399,7 +399,7 @@ const DashboardPg = () => {
           <IoMdTrendingUp /> +2% from last month
         </span>
       ),
-      onClick: () => window.open("https://kdstocksoft.vercel.app/products", "_blank"),
+      onClick: () => window.open("https://kdstocksoft.pages.dev/products", "_blank"),
     },
     {
       title: "Low Stock Items",
@@ -421,7 +421,7 @@ const DashboardPg = () => {
           <FaBolt /> Needs Attention
         </span>
       ),
-      onClick: () => window.open("https://kdstocksoft.vercel.app/low-stock", "_blank"),
+      onClick: () => window.open("https://kdstocksoft.pages.dev/low-stock", "_blank"),
     },
     {
       title: "Out of Stock",
@@ -443,7 +443,7 @@ const DashboardPg = () => {
           <FaExclamationTriangle /> Urgent Action
         </span>
       ),
-      onClick: () => window.open("https://kdstocksoft.vercel.app/out-of-stock", "_blank"),
+      onClick: () => window.open("https://kdstocksoft.pages.dev/out-of-stock", "_blank"),
     },
     {
       title: "Inventory Value",
@@ -465,7 +465,7 @@ const DashboardPg = () => {
           <IoMdTrendingUp /> +1.5% this quarter
         </span>
       ),
-      onClick: () => window.open("https://kdstocksoft.vercel.app/stock-summary", "_blank"),
+      onClick: () => window.open("https://kdstocksoft.pages.dev/stock-summary", "_blank"),
     },
   ];
 
