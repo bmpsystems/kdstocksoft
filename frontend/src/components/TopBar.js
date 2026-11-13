@@ -20,7 +20,7 @@ const TopBar = () => {
 
   const handleLogout = () => {
     localStorage.clear(); // remove all keys
-    window.location.href = 'https://kdstocksoft.vercel.app/';
+    window.location.href = 'https://kdstocksoft.pages.dev/';
   };
 
   const navigateMypofile = () => {
